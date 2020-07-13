@@ -9,6 +9,8 @@ to: definiert den Empfänger in ungerichteten Netzwerken. Entspricht ID in der N
 
 weight: Beziehungsstärke aufrgund von Zusammenarbeit außerhalb von SpaceX: 1 = schwach, 2 = mittel, 3 = stark 
 
+function: definiert Funktionen im Unternehmen
+
 time: Zeit im Vorstand: 1 = zwei Jahre, 2 = fünf Jahre, 3 = zehn Jahre oder länger
 
 <h2>Nodelist</h2>
@@ -23,4 +25,4 @@ type: unterscheidung zwische  Mensch und Unternehmen: 1=Mensch, 2=Unternehmen
 
 age: Alter der ID: 1=bis 30, 2=31-40, 3=41-50, 4=50+
 
-position: Position im Vorstand: CEO = 1, Präsidentin = 2, Vizepräsident(en) = 3, Chefingeniur/Landingengineer = 4
+position: Position im Vorstand: CEO = 1, Präsident/in = 2, Vizepräsident/in = 3, Chefingeniur/Landingengineer = 4
