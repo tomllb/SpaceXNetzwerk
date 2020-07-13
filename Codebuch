@@ -1,7 +1,7 @@
-Codebuch:
+<h1>Codebuch: </h1>
 
 
-Edgelist
+<h2>Edgelist</h2>
 
 from: definiert den Sender in gerichteten Netzwerken. Entspricht ID in der Nodelist. Keine Sonderzeichen, nur ein Wort: codiert in Nachname der Person oder Unternehmensname 
 
@@ -11,7 +11,7 @@ weight: Beziehungsstärke aufrgund von Zusammenarbeit außerhalb von SpaceX: 1 =
 
 time: Zeit im Vorstand: 1 = zwei Jahre, 2 = fünf Jahre, 3 = zehn Jahre oder länger
 
-Nodelist
+<h2>Nodelist</h2>
 
 id: codiert in Nachname der Person oder Unternehmensname
 
