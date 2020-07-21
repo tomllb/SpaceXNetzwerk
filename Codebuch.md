@@ -13,6 +13,8 @@ position: Position im Vorstand: CEO = 1, Präsident/in = 2, Vizepräsident/in = 
 
 time: Zeit im Vorstand: 1 = ein bis vier Jahre, 2 = fünf bis neun Jahre, 3 = zehn Jahre oder länger
 
+activ: Zeigt ob Person aktiv oder passiv im Unternehmen ist: 1=aktiv, 2=war im Unternehmen
+
 <h2>Nodelist</h2>
 
 id: codiert in Nachname der Person oder Unternehmensname
