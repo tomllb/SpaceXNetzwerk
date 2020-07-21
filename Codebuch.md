@@ -11,7 +11,7 @@ weight: Beziehungsstärke aufrgund von Zusammenarbeit außerhalb von SpaceX: 1 =
 
 position: Position im Vorstand: CEO = 1, Präsident/in = 2, Vizepräsident/in = 3, Chefingeniur/Landingengineer = 4
 
-time: Zeit im Vorstand: 1 = zwei Jahre, 2 = fünf Jahre, 3 = zehn Jahre oder länger
+time: Zeit im Vorstand: 1 = ein bis vier Jahre, 2 = fünf bis neun Jahre, 3 = zehn Jahre oder länger
 
 <h2>Nodelist</h2>
 
