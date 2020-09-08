@@ -23,7 +23,7 @@ name: vollständiger Name
 
 sex: 1 = male, 2 = female, 3 = divers
 
-type: unterscheidung zwische  Mensch und Unternehmen: 1=Mensch, 2=Unternehmen
+type: unterscheidung zwischen  Mensch und Unternehmen: 1=Mensch, 2=Unternehmen
 
 age: Alter der ID: 1=bis 30, 2=31-40, 3=41-50, 4=50+
 
