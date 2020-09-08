@@ -1,1 +1,1 @@
-Analyse des Vorstandes von SpaceX und deren Verknüpfungen zu anderen Raumfahrtunternehmen.
+Analyse von SpaceX und deren Verknüpfungen zu anderen Raumfahrtunternehmen.
