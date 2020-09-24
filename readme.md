@@ -1,1 +1,1 @@
-Analyse von SpaceX und deren Verknüpfungen zu anderen Raumfahrtunternehmen.
+Analyse der Verknüpfungen von SpaceX-Arbeitgebern-Arbeitnehmern zu anderen Raumfahrtunternehmen.
