@@ -7,7 +7,7 @@ from: definiert den Sender in gerichteten Netzwerken. Entspricht ID in der Nodel
 
 to: definiert den Empfänger in ungerichteten Netzwerken. Entspricht ID in der Nodelist. 
 
-position: Position im Vorstand: CEO = 1, Präsident/in = 2, Vizepräsident/in = 3, Chefingeniur/Landingengineer = 4, 5=Director/Generel/Chief, 6=Member, 7=Investoren
+position: Position im Vorstand: CEO/Vorstand = 1, Präsident/in = 2, Vizepräsident/in = 3, Chefingeniur/Landingengineer = 4, 5=Director/Generel/Chief/Vorstandsvorsitzende/r, 6=Member, 7=Investoren
 
 time: Zeit im Vorstand: 1 = ein bis vier Jahre, 2 = fünf bis neun Jahre, 3 = zehn Jahre oder länger
 
