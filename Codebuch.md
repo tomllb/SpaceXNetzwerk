@@ -21,6 +21,6 @@ name: vollständiger Name
 
 sex: 1 = male, 2 = female, 3 = divers
 
-type: unterscheidung zwischen  Mensch und Unternehmen: 1=Mensch, 2=Unternehmen
+type: unterscheidung zwischen  Mensch und Unternehmen: 1=Mensch, 2=Unternehmen, 3=Projekt
 
 
