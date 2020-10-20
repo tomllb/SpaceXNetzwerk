@@ -30,7 +30,7 @@ LinkedIn, diverse Websiten: Boards, Unternehmenswebsiten, Vorstände etc..
 Keine Anonymisierung nötig da es sich um öffentliche Personen handelt
 
 ## Codebuch
-Das [Codebuch](XXXX.github.com) beschreibt die Variablen, Relationen und Gewichte des Netzwerks und ist ebenfalls auf Github hinterlegt. ( abändern in passende Begriffe )
+Das [Codebuch](https://github.com/tomllb/SpaceXNetzwerk/blob/master/Codebuch.md) beschreibt die Variablen, Relationen und Gewichte des Netzwerks und ist ebenfalls auf Github hinterlegt. ( abändern in passende Begriffe )
 
 # Analyse und Interpretation
 
