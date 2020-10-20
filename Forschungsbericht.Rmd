@@ -43,8 +43,8 @@ Das gerichtete Gesamtnetzwerk umfasst XX Knoten und XXX Beziehungen (siehe igrap
 library(igraph)
 
 # Einlesen der Edge- und Nodelist
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
+el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
 
 # Matrix erstellen
 edgematrix <-as.matrix(el)
