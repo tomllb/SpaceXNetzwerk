@@ -1,8 +1,8 @@
 ---
-title: "226305 edit.data Beitrag"
-subtitle: "Analyse des Beziehungsnetzwerks eines Semesters"
-author: "Swaran Sandhu | sandhu@hdm-stuttgart.de"
-date: "Sommersemester 2020"
+title: "226305 edit.data Beitrag SpaceX"
+subtitle: "Analyse des SpaceX Netzwerkes"
+author: "Ricarda Müterthies, Sebastian Brüne, Raouf Allaham, Tom Beyer | rm057@hdm-stuttgart.de, sb274@hdm-stuttgart.de, ma106@hdm-stuttgart.de, tb145@hdm-stuttgart.de"
+date: "WS 20/21"
 output: html_notebook
 ---
 
