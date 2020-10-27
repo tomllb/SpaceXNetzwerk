@@ -38,7 +38,7 @@ Das [Codebuch](https://github.com/tomllb/SpaceXNetzwerk/blob/master/Codebuch.md)
 
 Das gerichtete Gesamtnetzwerk umfasst XX Knoten und XXX Beziehungen (siehe igraph-Objekt).
 
-```{r Gesamnetzwerk erstellen, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+```{r Daten zum Netzwerk, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
 
 library(igraph)
 
@@ -53,173 +53,123 @@ edgematrix <-as.matrix(el)
 space <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
 space
 
-# Parameter zu Beschreibung des Netzwerks
+#Parameter zu Beschreibung des Netzwerks:
 
-## ist das Netzwerk bereits vereinfacht?
-is.simple(space)
-
-## besteht das Netzwerk aus Komponenten?
-## wenn ja, wie vielen?
-is.connected(space)
+#Das Netzwerk besteht aus 71 Komponenten
 components(space)
 
-## Dichte des Netzwerks
+##Die Dichte des Netzwerks beträgt 0,015
 edge_density(space,
              loops=FALSE)
 
-## Umfang des Netzwerks
+##Der Umfang des Netzwerks ist 2
 diameter(space)
 
-## Pfaddistanzen (Distance)
+##Pfaddistanzen: Highest: Elon Musk & ISS 
 farthest_vertices(space)
 
 ```
 
-Das Hauptnetzwerk besteht aus XX Komponenten mit XX und XX Knoten, die nicht miteinander verbunden sind. Die Dichte im Netzwerk beträgt XX Prozent von allen möglichen Verbindungen. Die maximale Pfaddistanz beträgt XX Schritte.
+Das SpaceX besteht aus 71 Komponenten. Die Dichte im Netzwerk beträgt 0,15% Prozent von allen möglichen Verbindungen. Die maximale Pfaddistanz beträgt 2 Schritte.
 
-```{r Einfache Visualisierung des erstellten Objekt, fig.height=10, fig.width=14, message=TRUE, warning=TRUE, paged.print=TRUE}
-
-# Pro-Tipp: die Ausgabe jedes "chunks" lässt sich über das Rädchen direkt über dem Textfeld einstellen. Hier habe ich die Bildfläche auf 10 auf 16 Inches eingestellt, d.h. das Netzwerk wird automatisch auf eine Fläche von 10 auf 16 Inches geplottet. Für den Anfang empfehle ich immer bei Netzwerken bis 50 Knoten mit dem Kamada-Kawai Algorithmus zu arbeiten, weil hier die Knoten immer an die gleiche Position gesetzt werden und wir dadurch Abweichungen besser erkennen können.
-
-plot(space,
-     asp=0, 
-     layout=layout_with_kk,
-     edge.arrow.size=.5,
-     vertex.size=10,
-     main ="Übersicht des Gesamtnetzwerk SpaceX")
-```
-
-*Vereinfachtes Gesamtnetzwerk*
-Der erste Überblick zeigt, dass das Netzwerk schnell unübersichtlich wird, weil hier drei Beziehungsarten mit zum Teil mehreren Gewichten in einer Abbildung dargestellt werden.
-Deshalb ist es sinnvoll, ein vereinfachtes Gesamtnetzwerk zu erstellen. Vereinfacht bedeutet, dass die unterschiedlichen Beziehungsarten ignoriert werden und dafür die Gewichte des Hilfs- und Ratsuche Netzwerk zusammengefasst werden (um das Ergebnis nicht zu verfälschen, wird das Beziehungsnetzwerk vorher gelöscht)
-
-```{r Vereinfachtes Gesamtnetzwerk, fig.height=8, fig.width=12, message=FALSE, warning=FALSE}
+```{r Erste Visualisierung des SpaceX Netzwerkes, fig.height=5, fig.width=10, message=TRUE, warning=TRUE, paged.print=TRUE}
 library(igraph)
 el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
 edgematrix <-as.matrix(el)
 space <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-list.edge.attributes(space)
 
-# simplify Gesamtnetzwerk 
-# Um die Ergebnisse der Gewichte nicht zu verfälschen, werden die Edge-Attribute relation und complicated gelöscht.
-space <- delete_edge_attr(space, "position")
-space <- delete_edge_attr(space, "time")
-list.edge.attributes(space)
+#Erste Visualisierung des SpaceX Netzwerkes zur Darstellung
 
-# mit dem Befehl simplify() lassen sich Edge-Attribute wie das Gewicht zusammenfassen. Damit ist zwar nicht mehr nachvollziehbar, um welche Beziehung es sich handelt. Dafür lassen sich die Beziehungsstärken aber besser abbilden. Dies ist später für die Analyse von dyadischen Beziehungen wichtig.
-is_simple(space)
-space_sim <- simplify(space,edge.attr.comb=list(weight="sum"))
-is_simple(space_sim)
-space_sim
+?igraph.plotting
 
-# die aggregierten Werte für weight von s_sim werden deutlich.
-list.edge.attributes(space_sim)
-edge.attributes(space_sim)$weight
+V(space)$color <- "darkorange"
+V(space)$frame.color <- "black"
+E(space)$color <- "blue"
 
-# einfache Visualisierung des aggregierten Netzwerks
-plot(space_sim,
+plot(space,
+     edge.arrow.size=0.1,
      layout=layout_nicely,
-     edge.arrow.size=.5,
-     vertex.size=8,
-     edge.curved=.2,
-     edge.curved=curve_multiple(space_sim),
-     main="Gesamtnetzwerk vereinfacht",
-     sub="Aggregierte Gewichte von Position und Zeit im Unternehmen")
+     main="SpaceX: Erste Visualiserung des Netzwerks",
+     asp=0,
+     vertex.size=2)
 ```
 
-Die Anzahl der Knoten ist gleich geblieben (38), aber die Anzahl der Kanten hat sich auf 124 reduziert. Die Verteilung des Gewichts lässt klare Präferenzen innerhalb des Netzwerks zwischen einzelnen Dyaden zeigen. Diese Vorselektion ist später wichtig, um starke Beziehungspaare innerhalb des Netzwerks zu analysieren.
+*Erste Visualiserung des Gesamtnetzwerk*
+Die erste Visualiserung zeigt, dass das Gesamtnetzwerk aus vielen einzelnen Gruppen besteht (Cluster), welche sich bilden, aber jeweils mit einem Hauptakteur verbunden sind. Dabei ist zu beachten, dass hier keine Unterscheidung zwischen Akteuren vorliegt. Alle werden gleich behandelt und gleich visualisiert. 
 
-
-```{r 2 Übersicht Netzwerkattribute}
-list.vertex.attributes(space)
-# vertex.attributes(space)
-list.edge.attributes(space)
-# edge.attributes(space)
-# edge.attributes(space)$weight
 ```
 
-Das Netzwerk hat nach dem [](# Error : selection is not a URL) folgende Attribute:
+```
 
-*Vertex-Attribute*
-- name: Name des Knotens, anonym codiert von 1 bis 38
-- sex: Geschlecht 1 weiblich, 2 männlich, 3 divers
-- crpr: Vertiefungsrichtung (1 CR, 2 PR)
-- age: Alter 1 bis 20, 2 21-22, 3 23-24, 4 25 und älter
-- smoke: Nichtraucher 1, Raucher 2
-- tatoo: nein 1, ja 2
-- eyes: Augenfarbe: 1 grün, 2 blau, 3 braun, 4 blau.
-- hair: Haarfarbe: 1 braun, 2 schwarz, 3 blond, 4 rot
 
-Die Vertex-Attribute treffen auf alle Knoten zu.
 
-Die gesetzten Werte der Attribute lassen sich durch die Selektion des entsprechenden Attributes auslesen.
-
-```{r 2 Auslesen von Attributen }
+```{r 2 Vertexattribute}
+#Netzwerkattribute: Node
+list.vertex.attributes(space) 
+#Auslesen der Attribute
+vertex.attributes(space)$name
 vertex.attributes(space)$sex
-edge.attributes(space)$time
-# wichtig: sind keine Werte gesetzt, dann behandelt igraph den Wert als NA, also not available. Das ist wichtig für die Kalkulation der Netzwerkbeziehungen. Complicated ist ein Wert der sich nur auf das Teilnetzwerk love bezieht und spielt deshalb für die anderen 2x76 Beziehungen keine Rolle. 
+vertex.attributes(space)$type
 
 ```
+
+Das SpaceX Netzwerk besitzt folgende Vertex Attribute:
+ 
+*Vertex-Attribute* 
+- name: Name des Knotens 
+- sex:  1 male, 2 female, 3 diverse
+- type: Unterscheidung zwischen Mensch, Unternehmen und Projekt: 1=Mensch, 2=Unternehmen, 3=Projekt
+
+
+```{r 2 Edgeattribute}
+#Netzwerkattribute: Edge
+list.edge.attributes(space)
+#Auslesen der Attribute
+edge.attributes(space)$activ
+edge.attributes(space)$time
+edge.attributes(space)$position
+
+```
+
+Das SpaceX Netzwerk besitzt folgende Edge Attribute:
 
 *Edge-Attribute*
-- weight: Erste Nennung (Primärer Kontakt). Zweite Nennung (Sekunderärer Kontakt)
-- relation: Ratsuche (help), Zusammenarbeit (work), Liebesbeziehung (love)
-- complicated: bezieht sich nur auf das Teilnetzwerk Liebesbeziehung
+- position: Position im Vorstand: CEO/Vorstand = 1, Präsident/in = 2, Vizepräsident/in = 3,     Chefingeniur/Landingengineer = 4, 5=Director/Generel/Chief/Vorstandsvorsitzende/r, 6=Member
+- time: Zeit im Vorstand: 1 = ein bis vier Jahre, 2 = fünf bis neun Jahre, 3 = zehn Jahre oder länger
+- activ: Zeigt ob Person aktiv oder passiv im Unternehmen ist: 1=aktiv, 2=war im Unternehmen
 
-Die Edge-Attribute sind unterschiedlich verteilt. Durch die Erhebung haben die Studierenden ein Ratsuchenetzwerk (Wen fragst Du um Rat?) und ein Zusammenarbeitsnetzwerk (Mit wem arbeitest Du am liebsten zusammen?) angeben müssen. Für beide Fragen gab es eine erste und ein zweite Nennung. Die erste Nennung wird entsprechend höher gewichtet. Die Fragen waren verpflichtend.
-Das bedeutet, dass die Edges sich wie folgt verteilen: 38*2 = 76 Beziehungenangaben für jeweils help und work.
+```{r Erstellen der Teilnetzwerke, fig.height=10, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+#Erstellung Teilnetzwerk nach Frauenanteil
+space_female <- delete_vertices(space, V(space)[sex < "2" ]) 
+space_female
 
-Das bedeutet, dass es folgende Teilnetzwerke aufgrund der Edge-Attribute gibt:
-1) h3 Hilfsnetzwerk, erste Nennung, d.h. starke Gewichtung (Wert 3)
-2) h1 Hilfsnetzwerk, zweite Nennung, d.h. weniger starke Gewichung (Wert 1)
-3) h Hilfsnetzwerk mit der Zusammenfassung beider Gewichte über simplifiy()
+space_female_human <- delete_vertices(space_female, V(space_female)[type > "1"]) 
+space_female_human
 
-1) w3 Zusammenarbeit: erste Nennung, d.h. starke Gewichtung (Wert 3)
-2) w1 Zusammenarbeit: zweite Nennung, d.h. weniger starke Gewichung (Wert 1)
-3) w Zusammenarbeit mit der Zusammenfassung beider Gewichte über simplify()
+#Visualisierung
+plot(space_female_human, 
+     layout=layout_nicely,
+     main="SpaceX Netzwerk mit weiblichen Akteuren",
+     vertex.color="pink")
 
-Wichtig: Für die Analyse der jeweiligen Teilnetzwerke müssen die anderen Relationen insbesonder love gelöscht werden, weil sonst der simplify-Befehl nicht ausgeführt werden kann.
+#Erstellung Teilnetzwerk nach Männeranteil
+space_male <- delete_vertices(space, V(space)[sex > "1" ]) 
+space_male
 
-Das Beziehungsnetzwerk love (l) kennt folgende Ausprägungen:
-1) l_pair reziproke Paarbeziehung (1)
-2) l_tinder Tinder-Like, muss nicht reziprok sein (2)
-3) l_crush einseitig verliebte Situtation (3)
+space_male_human <- delete_vertices(space_male, V(space_male)[type > "1"]) 
+space_male_human
 
-Wichtig: die Werte sind keine Gewichte, sondern unterschiedliche Beziehungstypen und gelten nur für das Teilnetzwerk "love". Für die Analyse der anderen Beziehungen empfiehlt es sich, das edge.attribut "love" zu löschen.
-
-## 4.2 Analyse der Teilnetzwerke 
-
-### 4.2.1 Teilnetzwerke nach Beziehungsart (Edge-Attribute)
-
-Das Netzwerk besteht aus drei Beziehungsarten: Ratsuche (zukünftig Teilnetzwerk h für help), Zusammenarbeit (zukünftig Teilnetzwerk w für work) und Liebesbeziehung (zukünftig Teilnetzwerk l für love). Die Teilnetzwerke work und help sind gewichtet, d.h. die erste Nennung wurde mit 3 codiert und die zweite Nennung mit 1. Das bedeutet, dass jedes Teilnetzwerk über 76 Beziehungen hat (38 Mal eine erste Nennung und 38 Mal eine zweite Nennung). Die Liebesbeziehung wurde nicht gewichtet, sondern nach unterschiedlichen Beziehungsarten unterteilt.
-
-*Generelle Teilnetzwerke*
-
-- help (gesamt)
-- work (gesamt)
-- love (gesamt)
-
-```{r Teilnetzwerke erstellen und vereinfachen, message=FALSE, warning=FALSE, paged.print=FALSE}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-list.edge.attributes(s)
-
-work <- subgraph.edges(s, E(s)[relation==1]) 
-help <- subgraph.edges(s, E(s)[relation==2])
-love <- subgraph.edges(s, E(s)[relation==3])
-
-work # das Netzwerk hat nur noch 76 Kanten (also 2*38 Antworten)
-# help # das sind eigenständige igraph-objekte
-# love
+#Visualisierung
+plot(space_male_human, 
+     layout=layout_nicely,
+     main="SpaceX Netzwerk mit männlichen Akteuren",
+     vertex.color="grey")
 
 
 ```
 
-Damit die Netzwerke gut vereinfacht werden können sollten die ungenutzen edge-attribute wie relation oder complicated gelöscht werden, damit die jeweiligen Hauptnetzwerke eigenständig verglichen werden können.
+Die Teilnetzwerke zeigen den Frauen- und Männeranteil im gesamten Netzwerk. Ganz klar sticht die Dominanz des männlichen Geschlechts in Raumfahrtunternehmen heraus.
 
 ```{r Nicht benötigte Edge-Attribute löschen, message=FALSE, warning=FALSE, paged.print=TRUE}
 library(igraph)
