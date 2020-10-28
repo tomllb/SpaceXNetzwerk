@@ -38,7 +38,7 @@ Das [Codebuch](https://github.com/tomllb/SpaceXNetzwerk/blob/master/Codebuch.md)
 
 Das gerichtete Gesamtnetzwerk umfasst XX Knoten und XXX Beziehungen (siehe igraph-Objekt).
 
-```{r Daten zum Netzwerk, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+```{r 1. Daten zum Netzwerk, echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
 
 library(igraph)
 
@@ -72,7 +72,7 @@ farthest_vertices(space)
 
 Das SpaceX besteht aus 71 Komponenten. Die Dichte im Netzwerk beträgt 0,15% Prozent von allen möglichen Verbindungen. Die maximale Pfaddistanz beträgt 2 Schritte.
 
-```{r Erste Visualisierung des SpaceX Netzwerkes, fig.height=5, fig.width=10, message=TRUE, warning=TRUE, paged.print=TRUE}
+```{r 2. Erste Visualisierung des SpaceX Netzwerkes, fig.height=5, fig.width=10, message=TRUE, warning=TRUE, paged.print=TRUE}
 library(igraph)
 el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
@@ -81,14 +81,9 @@ space <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
 
 #Erste Visualisierung des SpaceX Netzwerkes zur Darstellung
 
-?igraph.plotting
-
-V(space)$color <- "darkorange"
-V(space)$frame.color <- "black"
-E(space)$color <- "blue"
 
 plot(space,
-     edge.arrow.size=0.1,
+     edge.arrow.size=0.5,
      layout=layout_nicely,
      main="SpaceX: Erste Visualiserung des Netzwerks",
      asp=0,
@@ -98,13 +93,9 @@ plot(space,
 *Erste Visualiserung des Gesamtnetzwerk*
 Die erste Visualiserung zeigt, dass das Gesamtnetzwerk aus vielen einzelnen Gruppen besteht (Cluster), welche sich bilden, aber jeweils mit einem Hauptakteur verbunden sind. Dabei ist zu beachten, dass hier keine Unterscheidung zwischen Akteuren vorliegt. Alle werden gleich behandelt und gleich visualisiert. 
 
-```
-
-```
 
 
-
-```{r 2 Vertexattribute}
+```{r 3. Vertexattribute}
 #Netzwerkattribute: Node
 list.vertex.attributes(space) 
 #Auslesen der Attribute
@@ -122,7 +113,7 @@ Das SpaceX Netzwerk besitzt folgende Vertex Attribute:
 - type: Unterscheidung zwischen Mensch, Unternehmen und Projekt: 1=Mensch, 2=Unternehmen, 3=Projekt
 
 
-```{r 2 Edgeattribute}
+```{r 4. Edgeattribute}
 #Netzwerkattribute: Edge
 list.edge.attributes(space)
 #Auslesen der Attribute
@@ -139,333 +130,199 @@ Das SpaceX Netzwerk besitzt folgende Edge Attribute:
 - time: Zeit im Vorstand: 1 = ein bis vier Jahre, 2 = fünf bis neun Jahre, 3 = zehn Jahre oder länger
 - activ: Zeigt ob Person aktiv oder passiv im Unternehmen ist: 1=aktiv, 2=war im Unternehmen
 
-```{r Erstellen der Teilnetzwerke, fig.height=10, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
-#Erstellung Teilnetzwerk nach Frauenanteil
-space_female <- delete_vertices(space, V(space)[sex < "2" ]) 
-space_female
+```{r 5. Erstellen Teilnetzwerk nach Geschlechtern, fig.height=10, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
 
-space_female_human <- delete_vertices(space_female, V(space_female)[type > "1"]) 
-space_female_human
+el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
+edgematrix <-as.matrix(el)
 
-#Visualisierung
-plot(space_female_human, 
-     layout=layout_nicely,
-     main="SpaceX Netzwerk mit weiblichen Akteuren",
-     vertex.color="pink")
+spacegeschlecht <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+spacegeschlecht
 
-#Erstellung Teilnetzwerk nach Männeranteil
-space_male <- delete_vertices(space, V(space)[sex > "1" ]) 
-space_male
+# Defnierung der Farben
+V(spacegeschlecht)[V(spacegeschlecht)$sex == 2]$color <- "pink" #weiblich
+V(spacegeschlecht)[V(spacegeschlecht)$sex == 2]$name <- "W" 
+V(spacegeschlecht)[V(spacegeschlecht)$sex == 1]$color <- "lightblue" #männlich
+V(spacegeschlecht)[V(spacegeschlecht)$sex == 1]$name <- "M" #männlich
 
-space_male_human <- delete_vertices(space_male, V(space_male)[type > "1"]) 
-space_male_human
 
-#Visualisierung
-plot(space_male_human, 
-     layout=layout_nicely,
-     main="SpaceX Netzwerk mit männlichen Akteuren",
-     vertex.color="grey")
+#Visualisierung des Netzwerkes
+plot(spacegeschlecht,
+     
+     edge.arrow.size=.1,
+     vertex.size=5,
+     layout=layout_with_kk,
+     edge.curved=curve_multiple(spacegeschlecht),
+     main="Netzwerk nach Geschlechtern",
+     sub="Pink=Weiblich, Blau=Männlich")
 
 
 ```
 
 Die Teilnetzwerke zeigen den Frauen- und Männeranteil im gesamten Netzwerk. Ganz klar sticht die Dominanz des männlichen Geschlechts in Raumfahrtunternehmen heraus.
 
-```{r Nicht benötigte Edge-Attribute löschen, message=FALSE, warning=FALSE, paged.print=TRUE}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-
-# Nicht benötigte Edge-Attribute löschen
-# In den Teilnetzwerken sind edge-Attribute vorhanden, die wir für eine weitere Vereinfachung des Netzwerks nicht benötigen. Das gilt v.a. für die Teilnetzwerke work und help.
-
-work <- delete_edge_attr(work, "relation")
-work <- delete_edge_attr(work, "complicated")
-
-help <- delete_edge_attr(help, "relation")
-help <- delete_edge_attr(help, "complicated")
-
-love <- delete_edge_attr(love, "relation")
-# bei love bleibt die Kategorie complicated erhalten, da sich diese ja direkt auf die Art der Liebesbeziehung bezieht. Bei erstellten Liebesnetzwerk werden auch alle Knoten gelöscht, die keine Beziehungskategorie haben, d.h. das Netzwerk ist automatisch kleiner. 
-
-#edge.attributes(love)$complicated
-
-# mit dem Befehl simplify() lassen sich Edge-Attribute wie das Gewicht zusammenfassen. Damit ist zwar nicht mehr nachvollziehbar, um welche Beziehung es sich handelt. Dafür lassen sich die Beziehungsstärken aber besser abbilden. Dies ist später für die Analyse von dyadischen Beziehungen wichtig.
-# 
-is_simple(work)
-w_sim <- simplify(work,edge.attr.comb=list(weight="sum"))
-is_simple(w_sim)
-w_sim
-
-is_simple(help)
-h_sim <- simplify(help,edge.attr.comb=list(weight="sum"))
-is_simple(h_sim)
-h_sim
+```{r 6. Aufteilen des SpaceX Netzwerks durch Positionen im Unternehmen, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
 
 
-# definiert, dass 3 Abbildungen in einer Zeile stehen
-par(mfrow=c(1,3), mar=c(2,0,2,0)) 
 
-plot(w_sim, layout=layout_nicely,
-     edge.arrow.size=.2,
-     edge.color="blue",
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main=" Teilnetzwerk Zusammenarbeit",
-     sub="38 Knoten mit 75 Kanten")
-plot(h_sim, layout=layout_nicely, 
-     edge.arrow.size=.2,
-     edge.color="green",
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="Teilnetzwerk Ratsuche",
-     sub="38 Knoten mit 75 Kanten")
-plot(love, layout=layout_nicely, 
-     edge.arrow.size=.2,
-     edge.color="red",
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="Teilnetzwerk Liebe",
-     sub="23 Knoten mit 24 Kanten")
-
-# setzt die Darstellung wieder auf eine Abbildung zurück
-par(mfrow=c(1,1), mar=c(0,0,0,0))
 ```
 
+```{r 7. Komponenten im Netzwerk, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Komponentenanzahl im Netzwerk
+count_components(space)
 
-*Teilnetzwerke nach Gewichtung im Vergleich*
-Eine weitere Form der Analyse wäre es, die Teilnetzwerke work oder help nach der ersten und zweiten Nennung zu unterteilen. Mit der Annahme, dass die erste Nennung (und damit das Kantengewicht 3) eine höhere Popularität hat als die zweite Nennung lassen sich ggf. Dynamiken innerhalb des Netzwerks aufzeigen.
+#Gruppenaufteilung 
+space_gr <- groups(components(space))
+space_gr
 
-```{r Teilnetzwerke anhand des Kantengewichts vergleichen}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-list.edge.attributes(s)
+# Unteranalyse der Hauptkomponente
+is_connected(space)
 
-work <- subgraph.edges(s, E(s)[relation==1]) 
-work <- delete_edge_attr(work, "relation")
-work <- delete_edge_attr(work, "complicated")
-list.edge.attributes(work)
-edge.attributes(work)$weight
+# Analyse der Verteilung der Komponenenten
+components(space, mode = c("weak", "strong"))
 
-# aggregiertes Netzwerk
-is_simple(work)
-ws <- simplify(work,edge.attr.comb=list(weight="sum"))
-is_simple(ws)
-ws
+# Analyse der starken Komponenten
+components(space, mode = "strong")
 
-# unterteilt das Netzwerk in das Hilfsnetzwerk h1 mit einem Gewicht von 1
-w1 <- subgraph.edges(work, E(work)[weight==1])
-# analog dazu das Hilfsnetzwerk mit einem Gewicht von 3
-w3 <- subgraph.edges(work, E(work)[weight==3])
-# Vergleich der beiden Netzwerke
-w1
-w3
-ws
-# jedes Netzwerk hat jetzt genau 38 Knoten mit 38 Kanten
+# Anzahl der Komponenten
+count_components(space)
 
-# die beiden getrennten Netzwerke lassen sich nun einfach mit einer Addition wieder in das ursprüngliche Netzwerk zurückversetzen:
-wadd <- w1 + w3
-wadd
+# Aufteilung der Komponenten
+comp_space <- components(space)
+groups(comp_space)
 
 
-par(mfrow=c(1,4), mar=c(0,0,4,0)) # definiert, dass 3 plots in einer Zeile stehen
 
-plot(w3, layout=layout_with_kk,
-     edge.arrow.size=.2,
-     edge.color="darkblue",
-     vertex.color="grey75",
+```
+
+```{r 8. Cluster im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Anzahl der Clusters im Netzwerk
+clusters(space)
+
+#Komponenten werden aufgetrennt
+space_cluster <- decompose.graph(space)
+space_cluster
+
+#...und neu benannt
+space_cluster1 <- space_cluster [[1]]
+space_cluster1
+
+#Erstellung eines Walktrap-Cluster
+?cluster_walktrap()
+
+cl <- cluster_walktrap(space_cluster1)
+modularity(cl)
+membership(cl)
+
+plot(cl, space_cluster1, 
+     main="Walktrapcluster des Netzwerkes",
+     vertex.size=5,
+     vertex.label=NA)
+
+#Erstellung eines Edge Betweenness Cluster
+?cluster_edge_betweenness()
+
+eb <- cluster_edge_betweenness(space_cluster1)
+eb
+
+plot(eb, space_cluster1, 
+     main="Edge Betweenness Cluster des Netzwerkes",
+     vertex.size=5,
+     vertex.label=NA)
+
+
+
+#Zusatz: Degree und Betweenness-Zentralität
+
+degree1 <- degree(space, normalized=T)
+degree1
+
+betweenness1 <- betweenness(space, normalized=T)
+betweenness1
+ 
+par(mfrow=c(1,2), mar=c(0,0,2,1)) 
+
+#Visualisierung der Werte
+plot(space,
+     layout=layout_nicely,
+     vertex.size=ds*50,
+     vertex.label=NA,
+     vertex.color="blue",
      vertex.frame.color=NA,
-     main="starke Zusammenarbeit, \n Gewicht 3")
-
-plot(w1, layout=layout_with_kk,
-     edge.arrow.size=.2,
-     edge.color="lightblue",
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="Zusammenarbeit, \n Gewicht 1")
-
-plot(ws, layout=layout_with_kk,
-     edge.arrow.size=.2,
-     edge.color="blue",
-     edge.width=E(s)$weight, # definiert die Kantenstarke nach Gewicht
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="Zusammenarbeit, \n simplifiziert, gewichtet")
-
-plot(wadd, layout=layout_with_kk,
-     edge.arrow.size=.2,
      edge.color="black",
-     edge.width=E(wadd)$weight, # definiert die Kantenstarke nach Gewicht
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="Zusammenarbeit, \n addierte Teilnetzwerke")
+     main = "Degree-Verteilung")
 
-# setzt die Ansicht wieder auf einen Graph pro Zeile zurück
-par(mfrow=c(1,1), mar=c(0,0,1,2))
+plot(space,
+     layout=layout_nicely,
+     vertex.size=bs*50,
+     vertex.label=NA,
+     vertex.color="orange",
+     vertex.frame.color=NA,
+     edge.color="black",
+     main = "Closeness")
+
+par(mfrow=c(1,2), mar=c(0,0,2,1)) 
+par(mfrow=c(1,1), mar=c(0,0,2,1)) 
+
+```
+Was sagen diese Cluster aus??????? XXXXXXXXXXXXX
+
+
+```{r 9. Cliquen im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
+triad_census(space)
+
+largest_cliques(space)
+
+max_cliques(space)
 
 ```
 
-Interessant in der Analyse ist, dass die bis dahin zweite Komponente aus den Knoten 5,6,12,14,22,26 bei der ersten Nennung noch zusammenbleibt, bei der zweiten Nennung aber in zwei kleinere Komponenten zerfällt (5,22) und (6,12,14,26). Das bedeutet, dass die Dyade 5 und 22 sich sowohl bei der ersten als auch zweiten Nennung beides mal genannt hat. Folglich müsste das Gewicht des aufaddierten Netzwerks bei dieser Dyade den Wert 6 haben. 
+```{r 10. Ego Netzwerk höhster Degreewert & höhster Betweennesswert, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+#SpaceX hat die meisten verbundenen Knoten (22)
+ego_size(space)
 
-Ingesamt zeigt die Analyse, dass die Präferenzen für die Zusammenarbeit sich deutlich stärker zerlegen lässt, wenn man die Teilnetzwerke nach Gewicht erhebt. 
+#SpaceX hat als Knoten den höchsten Degree Wert (21)
+degree(space)
 
-*Teilnetzwerk Beziehung im Vergleich*
+#SpaceX hat auch den höhsten Betweennesswert (89)
+betweenness(space)
 
-```{r Teilnetzwerke anhand des Kantengewichts vergleichen}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-list.edge.attributes(s)
+#Erstellung des Ego-Netzwerkes von SpaceX
+spaceXego <- make_ego_graph(space, order = 1, nodes = V(space)$name == "SPACEX", mode ="all")
+spaceXego
 
-love <- subgraph.edges(s, E(s)[relation==3]) 
-love
-list.edge.attributes(love)
+spaceXego1 <- spaceXego [[1]]
+spaceXego1
 
-# Das Attribut "complicated" gibt drei Beziehungsarten an, mit denen das Netzwerk weiter unterteilt werden kann.
+V(spaceXego1)[V(spaceXego1)$name == "SPACEX"]$color <- "red"
 
-# Paarbeziehung im Netzwerk love
-l_pair <- subgraph.edges(love, E(love)[complicated==1])
-# Tinder-Swipe im Netzwerk love
-l_tinder <- subgraph.edges(love, E(love)[complicated==2])
-# Crush im Netzwerk love
-l_crush <- subgraph.edges(love, E(love)[complicated==3])
-
-# Vergleich der beiden Netzwerke
-love
-l_pair
-l_tinder
-l_crush
-
-par(mfrow=c(1,4), mar=c(0,0,4,0)) # definiert, dass 3 plots in einer Zeile stehen
-
-plot(love, layout=layout_with_kk,
-     edge.arrow.size=.2,
-     edge.color="darkblue",
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="alle Beziehungen")
-
-plot(l_pair, layout=layout_with_kk,
-     edge.arrow.size=.2,
-     edge.color="red",
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="Paarbeziehungen")
-
-plot(l_tinder, layout=layout_with_kk,
-     edge.arrow.size=.5,
-     edge.color="pink",
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="Tinder-Swipe")
-
-plot(l_crush, layout=layout_with_kk,
-     edge.arrow.size=.5,
-     edge.color="lightgreen",
-     vertex.color="grey75",
-     vertex.frame.color=NA,
-     main="Crush")
-
-# setzt die Ansicht wieder auf einen Graph pro Zeile zurück
-par(mfrow=c(1,1), mar=c(0,0,1,2))
-
-```
-
-Durch die Teilnetzwerke wird deutlich, dass bei den Paarbeziehungen zwei Triaden vorliegen (16,28,29) und (6,5,22). Entweder haben 28 und 5 jeweils eine Affäre oder sie neigen zur Polyamorie. Die Tinder-Beziehungen (swipes) scheinen nicht stark ausgeprägt zu sein (4 von 38 Befragten haben angegeben, dass sie auf Tinder aktiv sind). Davon mögen sich 33 und 9 gegenseitig auf Tinder und sind auch in einer Beziehung. 31 findet 19 attraktiv, aber nicht umgekehrt. Sehr begehrt im Semester scheint Knoten 23 zu sein, der fünf (heimliche) crushes hat. Knoten 23 findet aber wiederum 17 interessant. Knoten 6 hat zwei crushes. Knoten 16 mag Knoten 18, aber Knoten 18 findet wiederum Knoten 23 attraktiv: eine vertrackte Situation! 
-
-*Analyse der Teilnetzwerke (nach Node-Attributen)*
-
-### 4.2.2 Teilnetzwerke nach Node-Attributen
-
-Die Analyse der Teilnetzwerke nach Node-Attributen werden hier nur exemplarisch am Beispiel Geschlecht und Vertiefungsrichtung gezeigt. Der einfachste Weg ein Teilnetzwerk zu erstellen geht über den Befehl delete.vertices(). Damit werden alle Knoten samt Verbindungen gelöscht, die bestimmte Bedingungen erfüllen. Wenn die Node-Attribute numerisch codiert sind lassen sich logische Operatoren einsetzen.
-
-*Teilnetzwerk Geschlecht*
-
-```{r Teilnetzwerk nach Node-Attribut Geschlecht, fig.height=6, fig.width=10, message=FALSE, warning=FALSE, paged.print=TRUE}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-
-list.vertex.attributes(s)
-vertex_attr(s)$sex
-
-s_fem <- delete_vertices(s, V(s)[sex > "1"]) 
-s_fem
-plot(s_fem, layout=layout_with_kk,
-     main="Gesamtnetzwerk: weibliche Akteure",
-     edge.color="pink",
-     edge.arrow.size=.3,
-     vertex.color="pink",
-     vertex.frame.color=NA,
-     sub="n=29, 110 Kanten")
-```
-
-Bereits hier zeigt sich, dass das Netzwerk drei Komponenten zerfällt. Neben die zweite kleinere Komponente (die nur aus Frauen besteht) kommt noch eine kleine Dyade hinzu. 
-
-*Kombination von Node-Attributen*
-
-In diesem Beispiel lassen sich z.B. Geschlecht und Vertiefungsrichtung kombinieren. Die Analyse der jeweiligen Kategorien folgt dabei dem Forschungsziel.
-
-```{r Kombination Geschlecht und Vertiefungsrichtung}
-list.vertex.attributes(s)
-
-# Zunächst werden alle Werte gelöscht, die nicht weiblich sind (eins ist als weiblich codiert, also logischer Operator wird > verwendet, d.h. es werden alle männlichen und diversen Knoten gelöscht)
-s_fem <- delete_vertices(s, V(s)[sex >"1"]) 
-
-# Dann werden die Journalisten mit dem Wert ein 1 (weil 1 als CR Vertiefung codiert ist) aus dem Netzwerk s_fem gelöscht (in dem nur Frauen sind.)
-s_fem_pr <- delete_vertices(s_fem, V(s_fem)[crpr=="1"]) 
-s_fem_pr
-
-# Der plot verwendet nur wenig Anpassungen.
-plot(s_fem_pr, 
+plot(spaceXego1,
      layout=layout_with_kk,
-     main="Netzwerk der PR-Vertieferinnen",
-     edge.color="grey80",
-     edge.arrow.size=.3,
-     vertex.label.color="grey10",
-     vertex.color="pink",
-     sub="n=17, 48 Kanten, alle Beziehungsarten")
+     vertex.label=V(space)$ID,
+     vertex.label.color="black",
+     vertex.frame.color="white",
+     edge.color="black",
+     main="Ego Netzwerk von SpaceX")
+```
+Kleine Erklärung zu Degree und Betweenness Werten!! XXXXXXXXXXXXx
+
+```{r 11. Zentralitätsmaße im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+
 ```
 
+```{r 12. Closeness, Eigenvector und K-Core im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
+#Closenesswert
+closeness(space)
 
-### 4.2.3 Kombination von Edge und Nodeattributen
+#Eigenvector
+eigen_centrality(space)
 
-*Teilnetzwerk Frauen im Hilfsnetzwerk im Altersvergleich*
+#K-Core
+coreness(space)
 
-*Teilnetzwerk Männer bei Ratsuche in der Vertiefung CR*
+```
 
-## 4.3 Teilnetzwerke: Componenten, Cluster und Cliquen
-
-### 4.3.1 Komponenten
-
-### 4.3.2 Cluster
-
-### 4.3.3 Cliquen
-
-## 4.4 Teilnetzwerke: Ego-Netzwerke
-
-### 4.4.1 Egonetzwerke der stärksten Verbindungen (Degree)
-
-### 4.4.2 Egonetzwerke der Broler (betweenness)
-
-## 4.5 Zentralitätsmaße
-
-### 4.5.1 Degree
-
-### 4.5.2 Betweeness und Broker
-
-### 4.5.3 Closeness und Eigenvector
-
-### 4.5.4 Zentralitätsmaße im Vergleich
 
 
 ## 4.6 Transitivität und Homophilie im Netzwerk
@@ -474,71 +331,21 @@ plot(s_fem_pr,
 
 ### 4.6.2 Homophilie
 
-# Visualisiserung
 
-## 5.1 Gesamtnetzwerk
+## 5.1 Gesamtnetzwerk & Visualisierung
+```{r 12. Gesamtnetzwerk & Visualiserung, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
 
-### 5.1.1 Gesamtvisualisierung
 
-```{r Einfache Visualisierung des erstellten Objekt, fig.height=10, fig.width=16, message=TRUE, warning=TRUE, paged.print=TRUE}
-
-# setzt die Ränder (margins) auf 0, schneidet aber manchmal dadurch die Überschrift ab
-par(mar=c(0,0,0,0)) 
-
-plot(s,
-     asp=0, #definiert, dass der gesamte Raum ausgenutzt werden soll
-     layout=layout_with_kk,
-     vertex.size=10,
-     edge.arrow.size=.3,
-     edge.color="grey50",
-     edge.curved=curve_multiple(s))
-
-par(mar=c(0,0,0,0)) # setzt die Ränder zurück.
 ```
 
-Die erste Visualisierung des Netzwerks zeigt, dass es zwei klar getrennte Komponenten im Netzwerk gibt. Zudem zeigt sich, dass drei unterschiedlichen Beziehungsdimensionen eine schnelle Übersicht des Netzwerks erschweren. 
+
+### 5.1.1 Gesamtvisualisierung
 
 ### 5.1.2 Multiplexes Netzwerk
 Um das etwas übersichtlicher darszustellen, bietet sich bei einem Netzwerk mit verschiedenen Beziehungsarten an, diese farblich zu unterscheiden. 
 
-```{r Visualisierung eines multiplexe Netzwerke erstellen, fig.height=8, fig.width=10, message=TRUE, paged.print=TRUE}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-
-# definiert die Farbe der Relation
-E(s)[E(s)$relation == 1]$color <- "blue" 
-E(s)[E(s)$relation == 2]$color <- "darkgreen"
-E(s)[E(s)$relation == 3]$color <- "red"
-
-# Visualisierungsparameter festlegen
-par(mar=c(6,3,3,3)) 
-
-# Plot mit den gesetzten Farben für das Attribut Beziehung realisieren
-plot(s,
-     asp=0,
-     edge.arrow.size=.5,
-     vertex.color="gray75",
-     vertex.frame.color="NA",
-     vertex.size=8,
-     layout=layout_with_kk,
-     edge.curved=curve_multiple(s),
-     main="Multiplexes Netzwerk, d.h. verschiedene Formen der Beziehung",
-     sub="n=38 Knoten; Kantenfarbe 
-     blau=Zusammenarbeit, grün=Ratsuche, rot=Beziehung")
-
-par(mar=c(0,0,0,0)) 
-
-```
-
-Die Unterscheidung der unterschiedlichen Netzwerkarten lässt erste Rückschlüsse zu, ist aber immer noch nicht befriedigend. Aus diesem Grund werden nun 
-
 
 ## 5.2 Vergleich der Teilnetzwerke
-
-
 
 
 ## 5.3 Wichtige Akteure im Netzwerk
@@ -553,453 +360,6 @@ Die Unterscheidung der unterschiedlichen Netzwerkarten lässt erste Rückschlüs
 ## Datenmaterial und Skript
 
 ## Team, Arbeitsaufwand und Lessons Learned
-
-
-
-
-**igraph-Objekt initialisieren (Beispieldatensatz)**
-
-Denken Sie immmer daran, vor dem Einlesen die entsprechenden Programmpakete zu laden. Die Dateien müssen im CSV-Format vorliegen und werden als Edgelist und Nodelist mit dem Befehl read.csv eingelesen. Achten Sie hierbei, dass die Parameter richtig gesetzt sind (Kopfziele und Trennzeichen). Mit dem Befehl as.matrix erzeugen wir aus der Edgelist eine Matrix. graph_from_data verbindet die Matrix mit der Nodelist und gibt ihr die Bezeichnung "s". Achten Sie hier auf darauf, ob das Netzwerk gerichtet oder ungerichtet ist.
-
-```{r 1 Netzwerk einlesen, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-
-library(igraph)
-
-# Einlesen der Edge- und Nodelist
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-
-# Matrix erstellen
-edgematrix <-as.matrix(el)
-
-# Zusammenführen von Edge- und Nodelist als igraph-Objekt s
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-s
-```
-
-
-## 2 igraph-objekt verstehen
-In diesem Kapitel lernen Sie, wie man ein igraph-Objekt schnell interpretiert. Jedes igraph Objekt verfügt über eine feste Konvention, mit der es interpretiert werden kann. Damit sieht man schnell, welche Edge- und Nodeattribute das Netzwerk aufweist.
-
-```{r Netzwerkattribute_verstehen}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-s
-```
-
-In der ersten Zeile wird die "Class", also die Art des Objekts als igraph definiert. Der Code danach identifiziert das Objekt eindeutig. Danach kommen vier mögliche Ausprägungen des Netzwerks
-
-1) gerichtet (D) oder ungerichtet (N)
-2) mit Attributen (N) (named)
-3) gewichtet (W) (weighted)
-4) bipartite oder two-mode (B), d.h. muss das Vertex-Attribute type beinhalten.
-
-Nicht jedes Feld muss belegt sein. 
-
-Danach folgt zunächst die Anzahl der Knoten (V für vertices) und Kanten (E für edges)
-  
-Danach folgt eine Beschreibung der Attribute. Dabei wird der Name des Attributs zuerst genannt. In den Klammer werden zwei Eigenschaften präzisiert.
-e/v Edge- oder Vertex-Attribut
-n/c/l numerische (n), textliche (c) oder logische (l) Daten des Attributs.
-  
-Danach folgt ein Auszug der Beziehungen aus der Edgelist, die grafisch dargestellt sind. Um einen schnellen Überblick über die Anzahl der Knoten und Kanten zu erhalten, helfen uns die ecount(g) für die Anzahl der Edges und vcount(g) für die Anzahl der Kanten (Vertices).
-
-## 3 Netzwerkattribute 
-Die Netzwerkattribute lassen sich mit dem Befehl list.vertex.attributes(g) anzeigen für die Node-Atttribute, gleiches gilt für list.edge.attributes(g) für die Kantenattribute. 
-  
-Sollen die Werte eines bestimmten Attributes ausgewählt werden, dann wird das enstprechende Attribut mit *$* selektiert und mit dem Befehl *edge.attributes(g)* oder *vertex.attributes(g)* gekoppelt. Liegt z.B. das Edge-Attribut "weight", dann lassen sich diese Werte mit dem Befehl *edge.attributes(g)$weight* auslesen.
-
-*Aufgabe*
-- Wie viele Vertices und Edges hat das Netzwerk s?  
-- Erstellen Sie eine Liste aller Kanten- und Knotenattribute.  
-- Zeigen Sie die Werte für das Attribut "relation"" und das Attribut "sex" an. 
-
-```{r Netzwerkattribute lesen}
-vertex.attributes(s)
-edge.attributes(s)
-edge.attributes(s)$weight
-```
-
-## 4 Einfache Visualisierung
-Mit  *plot(g)* lassen sich einfache Visualisierungen durchführen. Der plot() Befehl überschreibt alle vorher erstellten Parameter und definiert diese nur für diesen plot. Sollen bestimmte Eigenschaften des Netzwerks dauerhaft festgelegt werden, dann ist es einfacher, diese Eigenschaften vorab dauerhaft zu definieren.
-
-Der Layout-Befehl layout_with_kk verwendet den Kamada-Kawai Algorithmus. Sein Vorteil ist, dass die Knoten immer an auf der gleichen Position festgelegt werden. Die Funktion *main=* legt den Titel des Abbildung fest, die Funktion *sub=* den entsprechenden Untertitel.
-
-*Aufgabe*  
-- Ändern Sie den Titel der Abbildung.  
-- Ändern Sie das verwendete Layout mit dem Fruchterman-Rheingold-Algorithmen (layout_with_fr) 
-
-```{r Einfache Visualisierung}
-plot(s,
-     layout=layout_with_kk,
-     main ="out-of-the-box Visualisierung des Netzwerks")
-```
-
-## 5 Netzwerkattribute festlegen
-Netzwerkattribute sind hilfreich, um Netzwerke besser zu verstehen. Sie sind wichtige Parameter für die spätere Visualisierung von Netzwerken. Jedes Netzwerk hat zusätzlich zu den erhobenen Attributen feststehende Visualisierungsparameter. Diese lassen sich beliebig manipulieren. Werden die Daten ein Mal festgeschrieben, dann gelten sie für alle weiteren Netzwerke. 
-
-Merke: Die Befehle **V(g)** und **E(g)** erstellen dauerhaft neue Vertex bzw. Edge-Attribute, die mit bestimmten Eigenschaften versehen werden können. Mit $ wird auf die entsprechenden Attribute zugegriffen.Die Attribute lassen sich auch durch "NA" komplett löschen oder durch ein bestehendes Attribut wieder ergänzen. 
-
-Beispielsweise wird hier die Füllfarbe eines Knotens auf dunkelorange definiert V(s)$color<-"darkorange". Mit vertex.attributes(g)$color kann dieser Wert angezeigt werden. Der Rahmen eines Knoten kann durch die Zuweisung des Wert "NA" ausgeblendet werden V(g)$frame.color<-"NA". Dies gilt auch für Kantenattribute. Beispielsweise lassen sich die Pfeilspitzen auf den Wert .2 setzen E(s)$arrow.size<-.2 oder die Farbe der Kanten entsprechend festlegen E(s)$color<-"darkorange"
-
-Manchmal ist es hilfreich die Labels auszublenden V(s)$label<-NA. Um diese wieder herzustellen das Vertex-Attribut "Label" mit dem Wert des Vertex-Attributs "Name" wieder überschrieben: V(s)$label<-V(s)$name. 
-Eine Übersicht aller Edge- und Vertex-Attribute, die mit diesen Befehlen verändert werden können liefert die Hilfefunktion ?igraph.plotting
-
-**Aufgabe**  
-- Die Visualisierung des Netzwerks soll dauerhaft folgende Farben haben:
-- Die Knoten in "darkblue"" mit einem Rand in "lightblue""
-- Die Kanten in "lightblue"" mir einer Pfeilspitze von .3
-- Eine neue, passende Hauptüberschrift und Unterüberschrift
-
-```{r Netzwerkattribute_manipulieren}
-
-?igraph.plotting
-
-V(s)$color <- "darkorange"
-V(s)$frame.color <- "NA"
-E(s)$arrow.size <- .2
-E(s)$color <- "darkorange"
-
-plot(s,
-     layout=layout_with_kk,
-     main ="Visualisierung mit geänderten Attributen")
-
-```
-
-## 6 Visualisierung verbessern
-Wir lesen jetzt das Netzwerk erneut ein, da wir die oben gesetzten Attribute überschreiben wollen. Dann wird das Netzwerk verschönert und optimiert. 
-
-Dabei werden wir die Ränder (margins) des Plotbereichs mit dem Befehl par() auf 0 setzen. Dazu wird ein Vector angelegt, der für die Ränder auf allen Kantenseiten auf 0 setzt.
-
-Im Plotbefehl selbst sind folgende verwenden wir folgende Argumente:
-asp=0 definiert, dass die Verhältnisse im Netzwerk erhalten bleiben sollen. Wir legen die Größe der Knoten mit 10 Punkt fest und die Farbe der Kanten in einen abgestuften Graubereich. 
-
-Das wichtigste neue Argument ist, dass die Kanten des Netzwerks S nun als so gekrümmt dargestellt werden sollen edge.curved, dass sich auch mehrfache Beziehungen nicht überlagern.
-
-```{r nice_visualzation, exercise=TRUE, exercise.lines = 15}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-s
-
-par(mar=c(0,0,0,0)) 
-
-plot(s,
-     asp=0, 
-     layout=layout_with_kk,
-     vertex.size=10,
-     edge.arrow.size=.4,
-     edge.color="grey50",
-     edge.curved=curve_multiple(s))
-
-par(mar=c(0,0.5,0.5,0)) 
-```
-
-**Aufgabe**
-Verwenden Sie Ihre Kenntnisse aus dem Tutorial und erstellen eine ähnliche Visualisierung ihres Datensatzes. Dies geht ungefähr bis zu einer Größe von 50 Knoten relativ gut. Wenn Sie über 200 Knoten haben, werden Sie keine sinnvolle Visualisierung erstellen können. Sie lernen im nächsten Tutorial, wie sich *Teilnetzwerke* visualisieren lassen.
-
-Achten Sie auf folgende Punkte bzw. ändern einige Parameter:
-- Farben und Größe der Knoten und Farbe Knotenrahmen,   
-- Farbe der Kanten,  
-- ggf. Algorithmus verändern,  
-- Titel des Netzwerks hinzufügen,  
-- Seitenränder verändern.  
-
-Eine Aufstellung über die in R verwendeten Farben erhalten Sie über den Befehl colors().
-
-*Achtung: Für die Ausgabe einer höher auflösenden Visualisierung sind hier die Höhe und Breite des Plots auf 12 und 16 inches definiert. 
-
-```{r Einfache Visuaslisierung, fig.height=12, fig.width=16}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-s
-
-par(mar=c(0,0,0,0)) 
-
-plot(s,
-     asp=0, 
-     layout=layout_with_kk,
-     vertex.size=10,
-     edge.arrow.size=.4,
-     edge.color="grey50",
-     edge.curved=curve_multiple(s))
-
-par(mar=c(0,0.5,0.5,0)) 
-```
-
-# II. Netzwerke selektieren
-
-## 1 Teilnetzwerk nach Edge-Attributen
-Verfügt das Netzwerk über entsprechende Edge-Attribute list.edge.attributes() lässt sich das Netzwerk durch die Auswahl spezifischer Edge-Attribute und dem Befehl subgraph.edges() erstellen. Der Befehl erstellt ein komplettes Unternetzwerk mit allen Node-Attributen. 
-
-Der Befehl subgraph.edges ist wie folgt aufgebaut:
-subgraph.edges(g, E(g)[Selektion des Attributs]) und liest sich wie folgt: Erstelle ein neues Netzwerk aus dem Netzwerk g, indem das Netzwerk basierend auf dem logischen Operator aus dem Edge-Attribut von g gewählt wird.
-
-Wichtig ist es hier, das Netzwerk neu zu benennen.
-
-```{r subgraph_edges}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-
-
-list.edge.attributes(s)
-edge.attributes(s)$relation
-
-work <- subgraph.edges(s, E(s)[relation==1]) 
-work
-
-plot(work,
-     edge.arrow.size=.3,
-     layout=layout_with_kk,
-     edge.color="blue",
-     edge.curved=.2,
-     edge.curved=curve_multiple(work),
-     main="Teilnetzwerk Zusammenarbeit",
-     sub="n=38, KK-Algorithmus")
-```
-
-**Aufgabe**
-Erstellen Sie ein Teilnetzwerk "help"" mit der Kantenfarbe "green" und ein Teilnetzwerk "love" mit der Kantenfarbe "red". Benennen Sie das Netzwerk entsprechend. Erstellen Sie dann ein Teilnetzwerk von Studierenden, die eine Paarbeziehung haben und nennen dieses Teilnetzwerk "relationship" (Tipp: Sie müssen dafür ins Codebuch des Datensatzes schauen und die Edge-Attribute entsprechend analysieren).
-
-
-```{r Übung Teilnetzwerke erstellen}
-
-
-
-```
-
-
-## 2 Multiplexe Netzwerke visualisieren
-Multiplexe Netzwerke haben mehr als nur eine Kantenart, d.h. es werden mehrere Beziehungsarten im gleichen Graphen visualisiert. Dazu gibt es zwei Möglichkeiten (die sich auch kombinieren lassen): Farben und Formen. Achtung: multiplexe Netzwerke werden leicht unübersichtlich, deshalb sollte die Visualisierung immer mit Bedacht vorgenommen werden.
-
-*Kantenfarben* verwenden: wir haben in dem Edge-Attribut "relation" zwei Werte angebgeben, nämlich "1" (work) und "2" (help), die unterschiedliche Beziehungen beschreiben. Die Kanten lassen sich entsprechend einfärben.
-
-```{r Multiplexe Netzwerke erstellen}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-
-# definiert die Farbe der Relation
-E(s)[E(s)$relation == 1]$color <- "blue" 
-E(s)[E(s)$relation == 2]$color <- "green"
-E(s)[E(s)$relation == 3]$color <- "red"
-
-
-# Visualisierungsparameter festlegen
-par(mar=c(0,0,1,0)) 
-
-plot(s,
-     asp=0,
-     edge.arrow.size=.2,
-     vertex.color="gray90",
-     vertex.frame.color="white",
-     vertex.size=10,
-     layout=layout_with_kk,
-     edge.curved=curve_multiple(s),
-     main="Multiplexes Netzwerk, d.h. verschiedene Formen der Beziehung",
-     sub="n=38, blau=Zusammenarbeit, grün=Ratsuche, rot=Beziehung")
-```
-
-**Aufgabe**
-Visualisieren Sie nur das Zusammenarbeitsnetzwerk work in "lightblue". Visualisieren Sie nur das Beziehungsnetzwerk love in "red". Alle weiteren Beziehungen werden im Farbwert "grey20" dargestellt.  
-
-```{r Übung multiplexes Netzwerk Farbänderungen}
-
-
-```
-
-
-## Einsatz von Kantenformen
-
-*Kantenformen* verwenden: Neben den Vertex-Formaten lassen sich auch die Kanten visuell anpassen. Hier stehen verschiedene Formen zur Verfügung: 0 or “blank”, 1 or “solid”, 2 or “dashed”, 3 or “dotted”, 4 or “dotdash”, 5 or “longdash”, 6 or “twodash”. Die Codierung ist vorgegeben und als edge.lty definiert. lty steht für Linetype, also die Art der Linie, die verwendet wird.
-
-```{r Multiplex Kantenformen}
-E(s)[E(s)$relation == 1]$lty <-2 # dashed (work)
-E(s)[E(s)$relation == 2]$lty <-3 # dotted (help)
-E(s)[E(s)$relation == 3]$lty <-4 # dotdash (love)
-
-# Visualisierung des multiplexen Netzwerks
-plot(s,
-     asp=0,
-     edge.arrow.size=.2,
-     edge.color="black",
-     vertex.color="gray90",
-     vertex.frame.color="white",
-     layout=layout_with_kk,
-     edge.curved=curve_multiple(s),
-     main="Multiplexes Netzwerk, Format der Kanten",
-     sub="n=38, work=dashed, help=dotted, love=dotdash")
-```
-
-**Aufgabe**
-Visualisieren Sie aus dem Hauptnetzwerk s das Zusammenarbeitsnetzwerks in roter Farbe und gepunktet.
-
-```{r Übung: Multiplexes Netzwerk in Farben und Formen darstellen}
-par(mar=c(0,0,0,0)) 
-
-
-```
-
-## 3 Teilnetzwerke nach Vertex-Attributen
-Teilnetzwerke lassen sich auch nach Vertex-Attributen erstellen. Dabei wird der Befehl delete_vertices(g). Damit werden Knoten gelöscht, die eine bestimmtes Vertex-Attribut aufweisen. Das bedeutet, dass die Auswahl des Netzwerks immer aufgrund der gelöschten Attribute erfolgt. Sollen z.B. das Netzwerk nur aus Männern bestehen, müssen alle Knoten mit den Attributen, die nicht Männer sind, gelöscht werden. Dazu helfen die logischen Operatoren. Wie im Beispiel unten werden z.B. alle Werte ausgewählt, die größer 1 sind. Alternativ könnte man auch auch den logischen Operator ist nicht != verwenden, der alle Werte ausser dem angegebenen löscht.
-
-Wichtig ist es hier, das Netzwerk neu zu benennen.
-
-```{r delete_vertices, exercise=TRUE, exercise.lines = 15}
-library(igraph)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-
-list.vertex.attributes(s)
-vertex_attr(s)$sex
-
-s_fem <- delete_vertices(s, V(s)[sex > "1"]) 
-s_fem
-plot(s_fem, layout=layout_with_kk,
-     main="Netzwerk, nur weiblich",
-     edge.color="grey80",
-     edge.arrow.size=.3,
-     vertex.color="pink",
-     sub="n=29, 110 Kanten")
-```
-
-**Aufgabe**
-Erstellen Sie ein männliches Unternetzwerk, färben die Knoten in "lightblue" und fügen passende Überschriften hinzu mit der Anzahl der Knoten und Kanten.
-
-```{r Übung Nezwerk nur männlich, exercise=TRUE, exercise.lines = 30}
-
-
-
-```
-
-*Verknüpfte Bedingungen*
-In diesem Beispiel wollen wir nur Knoten haben, die weiblich sind und PR vertiefen. Im Codebuch ist der Wert für weiblich für das Vertex-Attribut sex mit 1 codiert, die Variable PR ist als Vertex-Attribut crpr mit dem Wert 2 codiert. 
-
-Achten Sie darauf, dass zunächst ein Unternetzwerk s_fem erstellt wird und aus diesem Unternetzwerk ein zweites Netzwerk der Vertiefer erstellt wird!
-
-
-```{r Netzwerk mit Bedingungen selektieren}
-list.vertex.attributes(s)
-
-# Zunächst werden alle Werte gelöscht, die nicht weiblich sind (eins ist als weiblich codiert, also logischer Operator wird > verwendet, d.h. es werden alle männlichen und diversen Knoten gelöscht)
-s_fem <- delete_vertices(s, V(s)[sex >"1"]) 
-
-# Dann werden die Journalisten mit dem Wert ein 1 (weil 1 als CR Vertiefung codiert ist) aus dem Netzwerk s_fem gelöscht (in dem nur Frauen sind.)
-s_fem_pr <- delete_vertices(s_fem, V(s_fem)[crpr=="1"]) 
-s_fem_pr
-
-# Der plot verwendet nur wenig Anpassungen.
-plot(s_fem_pr, 
-     layout=layout_with_kk,
-     main="Netzwerk der PR-Vertieferinnen",
-     edge.color="grey80",
-     edge.arrow.size=.3,
-     vertex.label.color="grey10",
-     vertex.color="pink",
-     sub="n=17, 48 Kanten, alle Beziehungsarten")
-```
-
-**Aufgabe**
-Erstellen Sie ein Netzwerk der männlichen Journalismus-Vertiefer, die noch eine weitere Bedingung umfasst und benennen Sie das Netzwerk entsprechend.
-
-```{r Übung Netzwerkselektion}
-list.vertex.attributes(s)
-
-```
-
-
-## 4 Kombination von Edge- und Vertex-Attributen
-Natürlich lassen sich alle Varianten auch gemeinsam kombinieren zu einem Grand Finale:
-
-Uns interessiert jetzt ein das weibliche Unterstützungsnetzwerk von Personen, sich sich stark unterstützen und die über 23 Jahre alt sind. Wie sieht die Beziehung zwischen diesen Personen aus?
-
-
-```{r Übung: Grand finale}
-list.vertex.attributes(s)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-s
-
-# Schritt 1: Trennung in das Unterstützungsnetzwerk
-help <- subgraph.edges(s, E(s)[relation==2]) 
-help
-
-# Schritt 2: Selektion weight=3 
-help_strong <- subgraph.edges(help, E(help)[weight==3])
-
-# Wir wollen nun wissen, wie das Ratsuche-Netzwerk unter Frauen aussieht:
-fem <- delete_vertices(help_strong, V(help_strong)[sex != "1"]) # löscht alle nicht weiblichen Knoten
-
-plot(fem,
-     layout=layout_with_kk,
-     main="Unterstützungsnetzwerk weiblich",
-     edge.color="grey80",
-     edge.arrow.size=.3,
-     vertex.color="pink",
-     sub="weiblich, starke Beziehung")
-
-
-fem_old <- delete_vertices(fem, V(fem)[age < "3"])
-fem_old
-plot(fem_old, layout=layout_with_kk,
-     main="Unterstützungsnetzwerk weiblich (fem_old)",
-     edge.color="grey80",
-     edge.arrow.size=.3,
-     vertex.color="pink",
-     sub="weiblich, Alter über 23, starke Beziehung")
-
-# Es zeigt sich, dass nur eine (reziproke) Beziehung beim weiblichen Unterstützungsnetzwerk der über 23-jährigen übrig bleibt, nämlich zwischen Knoten 38 und 29. Um diese Dyade besser darzustellen können alle isolates, also Knoten, die nicht miteinander verbunden sind, gelöscht werden.
-
-# der Befehl delete.vertices löscht alle Knoten aus dem Netzwerk fem_old, die einen degree-Wert von 0 haben, also mit keinem anderen Knoten verbunden sind. 
-fem_old2 <- delete.vertices(fem_old, degree(fem_old)==0)
-fem_old2
-
-plot(fem_old2, layout=layout_with_kk,
-     main="Dyade ohne Isolates",
-     edge.arrow.size=.7,
-     edge.width=E(s)$weight,
-     edge.color="pink",
-     vertex.size=30,
-     vertex.color="pink",
-     vertex.frame.color="black",
-     vertex.frame.color="white",
-     vertex.label.color="black",
-     sub="Dyade zweier Frauen über 23, die sich gegenseitig stark unterstützen")
-```
-
-**Abschlussaufgabe**
-Erstellen Sie ein Teilnetzwerk mit folgenden Bedingungen: Gesucht werden männliche Journalisten, die überwiegend zusammenarbeiten und auf Tinder aktiv sind.
-
-Überlegen Sie zuerst anhand des Codebuchs, welche Schritte notwendig sind, damit Sie zunächst Teilnetzwerke selektieren und dann visualisieren können.
-
-
-```{r grand_finale_ex, exercise=TRUE, exercise.lines = 15}
-list.vertex.attributes(s)
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-edgematrix <-as.matrix(el)
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-s
-
-```
-
 
 
 
