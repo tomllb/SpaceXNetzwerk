@@ -7,8 +7,9 @@ output: html_notebook
 ---
 
 # Einleitung
-Wir wollen die interne Struktur des Vorstandes von SpaceX analysieren im Bezug auf die Verbindung zu anderen Raumfahrtunternehmen. Unser Ziel ist die Darstellung der Struktur der einzelnen Personen und wie sie zu verschiedenen Unternehmen beruflich stehen.
+In unserem Netzwerk-Forschungsprojekt haben wir die Vorstandsstruktur des Raumfahrtunternehmens SpaceX und dessen Verknüpfung zu anderen Unternehmen und Projekten der Branche untersucht. Dabei lag der Schwerpunkt auf der internen Struktur des Vorstandes von SpaceX mit dessen wichtigsten Akteuren und ihren Eigenschaften. Das Raumfahrtunternehmen wurde dann in Verbindung zu anderen gestellt, um etwaige Verknüpfungen zu erkennen. Um die Vernetzung weiter darzustellen, haben wir die Internationale Raumstation ISS als übergreifendes Projekt als verbindenden Knoten zwischen den einzelnen Raumfahrtunternehmen herausgehoben. Das Ziel der Forschung war es, zu erkennen, inwiefern SpaceX und dessen Akteure mit anderen Unternehmen und Projekten verknüpft sind, durch Zusammenarbeiten, ehemalige Arbeitgeber oder persönliche Verbindungen.  
 
+Im Folgenden werden die Forschung sowie die Generierung des Netzwerkes erklärt und dargestellt. 
 
 # Vorarbeiten und vergleichbare Studien
 ## Forschungsstand
@@ -17,21 +18,22 @@ Das Forschungsdesign lehnt sich zum einen an die lange Tradition der Netzwerkana
 
 ## Arbeitshypothesen
 
-Anfangshypothese: Alles miteinander verknüpft, viele Überschneidungen der Knoten, Raumfahrtunternehmen haben änhliche Vorstände. Vorstände arbeiten mehr zusammen und kennen sich mehr, Verknüpfungen sind breiter
-Zwischenergebnis: Nach ersten Recherchen stellte sich das Gegenteil heraus... wenig Konktakte, einzelne Cluster, wenig Verknüpfungen der verschiedenen Knoten der Raumfahrtunternehmen
-Endergebnis: Nach intensiver Recherche stellte sich heraus dass die Unternehmen nicht gut zueinander vernetzt sind. Akteure sind nur durch einzelne Ereignise verbunden (zb Uni, Hobbys, Engagements). Fast gar keine Verknüpfungen verhanden.
+Anfangshypothese: Zu Beginn der Forschung waren wir der Annahme, dass ein großer Anteil der dargestellten Personen miteinander verknüpft sein müsste und viele Überschneidungen zu sehen seien würden. Die Vermutung war, dass Raumfahrtunternehmen ähnliche Vorstände hätten oder diese eng zusammenarbeiten würden. Da die Akteure in derselben Branche tätig sind, war unsere Annahme, dass viele bereits bei anderen Raumfahrtunternehmen gearbeitet hätten oder deren Akteure aus anderem Umfeld kennen würden. 
+
+Zwischenergebnis: Nach ersten Recherchen und probeweisen Visualisierungen stellte sich das Gegenteil der Anfangshypothese heraus. Die recherchierten Akteure der jeweiligen Unternehmen bildeten einzelne Cluster mit sehr wenigen Verbindungen. 
+
+Endergebnis: Unsere Vermutung, dass die Akteure untereinander sehr vernetzt seien und damit einhergehend die einzelnen Raumfahrtunternehmen einzelner Länder zueinander in Beziehung stünden, hat sich nicht bestätigt. Im Gegenteil hat sich herausgestellt, dass hochrangige Mitarbeiter der einzelnen Unternehmen sehr wenige Verbindungen zueinander haben. Die Unternehmen sind fast ausschließlich durch das gemeinsame Projekt ISS vernetzt. Selbst intern im Unternehmen SpaceX weisen die Akteure nur wenige Beziehungen zueinander auf. Ausnahmen bilden vereinzelte Personen, die beispielsweise die gleiche Universität besucht haben.
 
 # Datenerhebung: Zugang, Bereinigung und Codebuch
 
 ## Zugang
-LinkedIn, diverse Websiten: Boards, Unternehmenswebsiten, Vorstände etc..
+Die Daten für unsere Forschung bestanden hauptsächlich aus personenbezogenen Daten der einzelnen Akteure. Diese haben wir aus frei zugänglichen Quellen wie LinkedIn und Mitarbeiterprofilen recherchiert. Unternehmenswebseiten gaben Auskunft über Vorstände und Zusammensetzungen einzelner Unternehmen. 
 
 ## Bereinigung des Datensatzes
-Keine Anonymisierung nötig da es sich um öffentliche Personen handelt
+Bei unserem Datensatz war keine Anonymisierung notwendig, da es sich um öffentliche Personen handelt. 
 
 ## Codebuch
-Das [Codebuch](https://github.com/tomllb/SpaceXNetzwerk/blob/master/Codebuch.md) beschreibt die Variablen, Relationen und Gewichte des Netzwerks und ist ebenfalls auf Github hinterlegt. ( abändern in passende Begriffe )
-
+Das [Codebuch](https://github.com/tomllb/SpaceXNetzwerk/blob/master/Codebuch.md) ist in Github hinterlegt und beschreibt verscheidene Variablen.
 # Analyse und Interpretation
 
 # Das Gesamtnetzwerk
