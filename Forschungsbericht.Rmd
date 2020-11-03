@@ -14,7 +14,7 @@ Im Folgenden werden die Forschung sowie die Generierung des Netzwerkes erklärt 
 # Vorarbeiten und vergleichbare Studien
 ## Forschungsstand
 
-Das Forschungsdesign lehnt sich zum einen an die lange Tradition der Netzwerkanalyse in der Schulforschung an (XXXX). Es greift zudem die klassische Studie von Krackhardt (XXXX) auf, der ein Ratsuche und Unterstützungsnetzwerk in einem Unternehmen untersuchte. 
+----
 
 ## Arbeitshypothesen
 
