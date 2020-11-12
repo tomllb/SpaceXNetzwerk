@@ -117,6 +117,7 @@ Das SpaceX Netzwerk besitzt folgende Edge Attribute:
 - time: Zeit im Vorstand: 1 = ein bis vier Jahre, 2 = fünf bis neun Jahre, 3 = zehn Jahre oder länger
 - activ: Zeigt ob Person aktiv oder passiv im Unternehmen ist: 1=aktiv, 2=war im Unternehmen
 
+
 ```{r 5. Erstellen Teilnetzwerk nach Geschlechtern, fig.height=10, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
 el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
@@ -125,9 +126,8 @@ spacegeschlecht <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=
 spacegeschlecht
 # Defnierung der Farben
 V(spacegeschlecht)[V(spacegeschlecht)$sex == 2]$color <- "pink" #weiblich
-V(spacegeschlecht)[V(spacegeschlecht)$sex == 2]$name <- "W" 
 V(spacegeschlecht)[V(spacegeschlecht)$sex == 1]$color <- "lightblue" #männlich
-V(spacegeschlecht)[V(spacegeschlecht)$sex == 1]$name <- "M" #männlich
+
 #Visualisierung des Netzwerkes
 plot(spacegeschlecht,
      
@@ -141,16 +141,18 @@ plot(spacegeschlecht,
 
 Die Teilnetzwerke zeigen den Frauen- und Männeranteil im gesamten Netzwerk. Ganz klar sticht die Dominanz des männlichen Geschlechts in Raumfahrtunternehmen heraus.
 
-```{r 6. Aufteilen des SpaceX Netzwerks durch Positionen im Unternehmen, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r 6. Aufteilen in Teilnetzwerke , fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
 
-#Noch nicht bearbeitet...
+#Unterteilung in Unis und Positionen
+#SpaceX und NASA unterscheiden
+
 ```
 
 ```{r 7. Komponenten im Netzwerk, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Komponentenanzahl im Netzwerk: 1 Komponente verhanden
 count_components(space)
 
-#fortführend...
+#erklären oder rauslöschen
 
 ```
 
@@ -207,7 +209,7 @@ plot(space,
 par(mfrow=c(1,2), mar=c(0,0,2,1)) 
 par(mfrow=c(1,1), mar=c(0,0,2,1)) 
 ```
-Clusteranalyse: ------------------
+Clusteranalyse: ------------------ ERKLÄREN
 
 
 ```{r 9. Cliquen im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -216,7 +218,7 @@ largest_cliques(space)
 #Es exisiteren 77 Cliquen im Netzwerk
 max_cliques(space)
 
-#fortführend
+#fortführend und erklären
 ```
 
 ```{r 10. Ego Netzwerk höhster Degreewert & höhster Betweennesswert, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -240,13 +242,14 @@ plot(spaceXego1,
      edge.color="black",
      main="Ego Netzwerk von SpaceX")
 ```
-Kleine Erklärung zu Degree und Betweenness Werten!! fortführend..
+XXX (Recherche Edge und Betweenees Netzwerk Literatur) Kleine Erklärung zu Degree und Betweenness Werten!! fortführend...
 
 ```{r 11. Zentralitätsmaße im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
 
 #noch nicht bearbeitet
 ```
 
+XXX erklären
 
 ```{r 12. Closeness, Eigenvector und K-Core im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
 #Closenesswert
@@ -257,30 +260,33 @@ eigen_centrality(space)
 coreness(space)
 ```
 
+XXX  CLoseness Eigenvector mit Lektüre erklären
+
+## 13 Projekte ISS
+
+-> ISS analyse wer hängt zusammen und verdeutlichen
 
 
-## 13 Projekte
 
-### 14 Teilnetzwerke der Raumfahrtunternehmen
-
-### 15 ...
+### 14 ...................
 
 
-```{r 16. Gesamtnetzwerk & Visualiserung, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r 15. Gesamtnetzwerk & Visualiserung, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
 
 
-#Next Stage
+#Next Stage alles visualisieren mit aufgetrennten akteuren bla bla
 
 
 
 ```
 
-# 17. Diskussion: Fazit, Limitationen und Ausblick
+# 16. Diskussion: Fazit, Limitationen und Ausblick
 
 # Anlage
 ## Literatur
+-> Netzwerkliteratur reinpasten
 
-- LINKED IN -
+- LINKED IN - und co.
 
 ## Codebuch
 
@@ -294,4 +300,3 @@ https://github.com/tomllb/SpaceXNetzwerk/blob/master/Codebuch.md
 
 Recherche: xx Hours
 Forschungsbericht: xx Hours
-
