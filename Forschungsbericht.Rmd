@@ -1,9 +1,12 @@
 ---
 title: "226305 Forschungsbericht"
-subtitle: "Analyse des SpaceX Netzwerkes"
+author: Ricarda Müterthies, Sebastian Brüne, Raouf Allaham, Tom Beyer | rm057@hdm-stuttgart.de,
+  sb274@hdm-stuttgart.de, ma106@hdm-stuttgart.de, tb145@hdm-stuttgart.de
 date: "WS 20/21"
-author: "Ricarda Müterthies, Sebastian Brüne, Raouf Allaham, Tom Beyer | rm057@hdm-stuttgart.de, sb274@hdm-stuttgart.de, ma106@hdm-stuttgart.de, tb145@hdm-stuttgart.de"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
+subtitle: Analyse des SpaceX Netzwerkes
 ---
 
 # Einleitung
@@ -53,16 +56,16 @@ space
 #Parameter zu Beschreibung des Netzwerks:
 #Das Netzwerk besteht aus 71 Komponenten
 components(space)
-##Die Dichte des Netzwerks beträgt 0,15%
+#Die Dichte des Netzwerks beträgt 0,15%
 edge_density(space,
              loops=FALSE)
-##Der Umfang des Netzwerks beträgt 2
+##Der Umfang des Netzwerks beträgt 2 Schritte (Wert des Programms)
 diameter(space)
 ##Pfaddistanzen: Highest: Elon Musk & ISS 
 farthest_vertices(space)
 ```
 
-Das SpaceX besteht aus 71 Komponenten. Die Dichte im Netzwerk beträgt 0,15% Prozent von allen möglichen Verbindungen. Die maximale Pfaddistanz beträgt 2 Schritte.
+Das Netzwerk besteht aus 71 Komponenten. Die Dichte im Netzwerk beträgt 0,15% Prozent. Das lässt daraus interpretieren, dass die Organisationen hauptächlich alleine arbeiten und die Beziehungen untereinander gering sind. Die maximale Pfaddistanz beträgt 2 Schritte. Von einem zu einem anderen Punkt sind es maximal 2 Schritte. Elon Musk und die ISS besitzen die höchste Pfaddistanz.
 
 ```{r 2. Erste Visualisierung des SpaceX Netzwerkes, fig.height=5, fig.width=10, message=TRUE, warning=TRUE, paged.print=TRUE}
 library(igraph)
@@ -80,8 +83,7 @@ plot(space,
 ```
 
 *Erste Visualiserung des Gesamtnetzwerk*
-Die erste Visualiserung zeigt, dass das Gesamtnetzwerk aus vielen einzelnen Gruppen besteht (Cluster), welche sich bilden, aber jeweils mit einem Hauptakteur verbunden sind. Dabei ist zu beachten, dass hier keine Unterscheidung zwischen Akteuren vorliegt. Alle werden gleich behandelt und gleich visualisiert. 
-
+Die erste Visualiserung zeigt, dass das Gesamtnetzwerk aus vielen einzelnen Gruppen besteht (Cluster), welche sich bilden, aber jeweils mit einem Hauptakteur verbunden sind. Dabei ist zu beachten, dass hier keine Unterscheidung zwischen Akteuren vorliegt. Alle werden gleich behandelt und gleich visualisiert. Die verschiedene Gruppen bestehen aus Personen der Organisationen sowie Projekten, welche in den Organisationen verfolgt werden.
 
 
 ```{r 3. Vertexattribute}
@@ -113,58 +115,161 @@ edge.attributes(space)$position
 Das SpaceX Netzwerk besitzt folgende Edge Attribute:
 
 *Edge-Attribute*
-- position: Position im Vorstand: CEO/Vorstand = 1, Präsident/in = 2, Vizepräsident/in = 3,     Chefingeniur/Landingengineer = 4, 5=Director/Generel/Chief/Vorstandsvorsitzende/r, 6=Member
+- position: Position im Vorstand: CEO/Vorstand = 1, Präsident/in = 2, Vizepräsident/in = 3, Chefingeniur/Landingengineer = 4, 5=Director/Generel/Chief/Vorstandsvorsitzende/r, 6=Member
 - time: Zeit im Vorstand: 1 = ein bis vier Jahre, 2 = fünf bis neun Jahre, 3 = zehn Jahre oder länger
 - activ: Zeigt ob Person aktiv oder passiv im Unternehmen ist: 1=aktiv, 2=war im Unternehmen
 
 
-```{r 5. Erstellen Teilnetzwerk nach Geschlechtern, fig.height=10, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r 5. Erstellen Teilnetzwerk nach Geschlechtern, fig.height=10, fig.width=15, message=FALSE, warning=FALSE, paged.print=FALSE}
 el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
 edgematrix <-as.matrix(el)
+
+ 
+
 spacegeschlecht <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
 spacegeschlecht
 # Defnierung der Farben
 V(spacegeschlecht)[V(spacegeschlecht)$sex == 2]$color <- "pink" #weiblich
 V(spacegeschlecht)[V(spacegeschlecht)$sex == 1]$color <- "lightblue" #männlich
+V(spacegeschlecht)[V(spacegeschlecht)$sex > 2 ]$color <- "grey" 
 
 #Visualisierung des Netzwerkes
+
 plot(spacegeschlecht,
-     
+     asp=0,
      edge.arrow.size=.1,
      vertex.size=5,
      layout=layout_with_kk,
      edge.curved=curve_multiple(spacegeschlecht),
      main="Netzwerk nach Geschlechtern",
-     sub="Pink=Weiblich, Blau=Männlich")
+     sub="Pink=Weiblich, Blau=Männlich, Black=Kein Geschlecht")
+
+par(mar=c(0,0,0,0)) 
 ```
 
-Die Teilnetzwerke zeigen den Frauen- und Männeranteil im gesamten Netzwerk. Ganz klar sticht die Dominanz des männlichen Geschlechts in Raumfahrtunternehmen heraus.
+Das Teilnetzwerk zeigt den Frauen- und Männeranteil im gesamten Netzwerk. Ganz klar sticht die Dominanz des männlichen Geschlechts in Raumfahrtunternehmen heraus. Dabei ist zu beachten, dass die schwarzen Knoten Projekte, Organisationen und Universitäten darstellen. Diese besitzen selbstverständlich kein Geschlecht, müssen aber im Netzwerk vorhanden sein, um die Beziehungen der Akteure zu visualisieren.
 
-```{r 6. Aufteilen in Teilnetzwerke , fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r 6. Aufteilen in Aktiv/Passiv Arbeitsverhätnis, fig.height=10, fig.width=15, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(igraph)
+el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
+edgematrix <-as.matrix(el)
 
-#Unterteilung in Unis und Positionen
-#SpaceX und NASA unterscheiden
+space <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+space
+
+#Definiert die Farben der Aktiven und Inaktiven Akteure
+E(space)[E(space)$activ == " 1"]$color <- "99" #Aktives Arbeitsverhältnis
+E(space)[E(space)$activ == " 2"]$color <- "red" #Passives Arbeitsverhältnis
+V(space)[V(space)$type == "1"]$color <- "white" #Menschen
+V(space)[V(space)$type == "2"]$color <- "grey" #Organisationen
+V(space)[V(space)$type == "3"]$color <- "#F5F6CE" #Projekte
+
+#Visualisierung
+plot(space,
+     asp=0,
+     layout=layout_nicely,
+     vertex.size=5,
+     edge.arrow.size=2,
+     main="Aktives und Passives Arbeitsverhältnis Netzwerk")
 
 ```
 
-```{r 7. Komponenten im Netzwerk, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
-# Komponentenanzahl im Netzwerk: 1 Komponente verhanden
-count_components(space)
+In diesem Teilnetzwerk unterscheiden wir zwischen eines aktuellen und ehmaligen Berschäftigungsverhältnisses der einzelnen Personen bei den Raumfahrtunternehmen. Unser Rechercheergebnis  zeigt ein Wechsel von Personal innerhalb der Organisationen SpaceX und NASA. Die Beschäftigten der Nicht-US Unternehmen verbleiben in ihren eigenen Raumfahrtunternehmen, es findet kein Austausch statt. Die Farbe der Beziehungen wird in grün und rot aufgeteilt um das aktive und passive Verhältnis besser zu visualisieren. Die hellgelben Nodes vertreten Projekte, welche keine aktiven oder passiven Beziehungen aufweisen.
 
-#erklären oder rauslöschen
+
+```{r 8. Teilnetzwerk Positionen, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+library(igraph)
+el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
+edgematrix <-as.matrix(el)
+
+space1 <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+space
+
+#Teilnetzwerk erstellen
+ceouvorstand <- subgraph.edges(space1, E(space1)[position==" 1"]) 
+ceouvorstand
+
+präsident <- subgraph.edges(space1, E(space1)[position==" 2"]) 
+präsident
+
+directorchief <- subgraph.edges(space1, E(space1)[position==" 5"]) 
+directorchief
+
+
+#Visualisierung
+plot(ceouvorstand,
+    edge.arrow.size=.3,
+     vertex.size=7,
+     vertex.color="#F5F6CE",
+     layout=layout_nicely,
+     edge.color="black",
+     main="Teilnetzwerk CEO & Vorstand")
+
+plot(präsident,
+     edge.arrow.size=.3,
+     vertex.size=7,
+     vertex.color="#F5F6CE",
+     layout=layout_nicely,
+     edge.color="black",
+     main="Teilnetzwerk Präsident/in")
+
+plot(directorchief,
+     edge.arrow.size=.3,
+     vertex.size=7,
+     vertex.color="#F5F6CE",
+     layout=layout_nicely,
+     edge.color="black",
+     main="Teilnetzwerk Vorstandsmitglieder")
+
+
+
+# definiert die Farbe der Relation
+E(space1)[E(space1)$position == " 1"]$color <- "red" 
+E(space1)[E(space1)$position == " 2"]$color <- "99"
+E(space1)[E(space1)$position == " 3"]$color <- "yellow"
+E(space1)[E(space1)$position == " 4"]$color <- "#FF00FF" 
+E(space1)[E(space1)$position == " 5"]$color <- "grey" 
+E(space1)[E(space1)$position == " 6"]$color <- "black" 
+
+
+
+# Visualisierungsparameter festlegen
+par(mar=c(0,0,1,0)) 
+
+plot(space1,
+     asp=0,
+     edge.arrow.size=.2,
+     vertex.color="white",
+     vertex.frame.color="grey",
+     vertex.size=5,
+     layout=layout_with_kk,
+     edge.curved=curve_multiple(space1),
+     main="Gesamtnetzwerk mit Positionen der Akteure",
+     sub="CEO=Red, Präsident=Green, Chefingenieur=Yellow, Weitere Ingenieure=Lila, Vorstandsmitgieder=Grey, Member=Black")
+
+
 
 ```
+
+XXX Erklären
+
 
 ```{r 8. Cluster im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Anzahl der Clusters im Netzwerk
 clusters(space)
+
 #Komponenten werden aufgetrennt
 space_cluster <- decompose.graph(space)
 space_cluster
+
 #...und neu benannt
 space_cluster1 <- space_cluster [[1]]
 space_cluster1
+
 #Erstellung eines Walktrap-Cluster
 ?cluster_walktrap()
 cl <- cluster_walktrap(space_cluster1)
@@ -174,6 +279,7 @@ plot(cl, space_cluster1,
      main="Walktrapcluster des Netzwerkes",
      vertex.size=5,
      vertex.label=NA)
+
 #Erstellung eines Edge Betweenness Cluster
 ?cluster_edge_betweenness()
 eb <- cluster_edge_betweenness(space_cluster1)
@@ -182,6 +288,7 @@ plot(eb, space_cluster1,
      main="Edge Betweenness Cluster des Netzwerkes",
      vertex.size=5,
      vertex.label=NA)
+
 #Zusatz: Degree und Betweenness-Zentralität
 degree1 <- degree(space, normalized=T)
 degree1
@@ -189,10 +296,11 @@ betweenness1 <- betweenness(space, normalized=T)
 betweenness1
  
 par(mfrow=c(1,2), mar=c(0,0,2,1)) 
+
 #Visualisierung der Werte
 plot(space,
      layout=layout_nicely,
-     vertex.size=ds*50,
+     vertex.size=degree1*50,
      vertex.label=NA,
      vertex.color="blue",
      vertex.frame.color=NA,
@@ -200,7 +308,7 @@ plot(space,
      main = "Degree-Verteilung")
 plot(space,
      layout=layout_nicely,
-     vertex.size=bs*50,
+     vertex.size=betweenness1*50,
      vertex.label=NA,
      vertex.color="orange",
      vertex.frame.color=NA,
@@ -209,49 +317,41 @@ plot(space,
 par(mfrow=c(1,2), mar=c(0,0,2,1)) 
 par(mfrow=c(1,1), mar=c(0,0,2,1)) 
 ```
-Clusteranalyse: ------------------ ERKLÄREN
+Erklären des Walktrapclusters und Edge Between (Literatur google Scholar)
 
 
-```{r 9. Cliquen im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
-#Größte CLique
-largest_cliques(space)
-#Es exisiteren 77 Cliquen im Netzwerk
-max_cliques(space)
 
-#fortführend und erklären
-```
-
-```{r 10. Ego Netzwerk höhster Degreewert & höhster Betweennesswert, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r 9. Ego Netzwerk höhster Degreewert & höhster Betweennesswert, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
 #SpaceX hat die meisten verbundenen Knoten (22)
 ego_size(space)
 #SpaceX hat als Knoten den höchsten Degree Wert (21)
 degree(space)
 #SpaceX hat auch den höhsten Betweennesswert (89)
 betweenness(space)
+
 #Erstellung des Ego-Netzwerkes von SpaceX
 spaceXego <- make_ego_graph(space, order = 1, nodes = V(space)$name == "SPACEX", mode ="all")
 spaceXego
+
 spaceXego1 <- spaceXego [[1]]
 spaceXego1
-V(spaceXego1)[V(spaceXego1)$name == "SPACEX"]$color <- "red"
+
+V(spaceXego1)[V(spaceXego1)$type == "1"]$color <- "white"
+V(spaceXego1)[V(spaceXego1)$type == "2"]$color <- "grey"
+V(spaceXego1)[V(spaceXego1)$type == "3"]$color <- "#F5F6CE"
+
+
 plot(spaceXego1,
      layout=layout_with_kk,
      vertex.label=V(space)$ID,
      vertex.label.color="black",
-     vertex.frame.color="white",
      edge.color="black",
      main="Ego Netzwerk von SpaceX")
 ```
 XXX (Recherche Edge und Betweenees Netzwerk Literatur) Kleine Erklärung zu Degree und Betweenness Werten!! fortführend...
 
-```{r 11. Zentralitätsmaße im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
 
-#noch nicht bearbeitet
-```
-
-XXX erklären
-
-```{r 12. Closeness, Eigenvector und K-Core im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r 10. Closeness, Eigenvector und K-Core im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
 #Closenesswert
 closeness(space)
 #Eigenvector
@@ -262,25 +362,55 @@ coreness(space)
 
 XXX  CLoseness Eigenvector mit Lektüre erklären
 
-## 13 Projekte ISS
+„Mit dem Zentralitätsmaß "Eigenvektor" wird ermittelt, wie gut eine Entität verbunden ist und wie stark der direkte Einfluss ist, den sie auf andere Entitäten im Netzwerk ausüben kann“ (IBM Corporation, 2017, Abschnitt 7). Knoten mit einem hohen Eigenvektor-Maß sind mit wichtigen Knoten verbunden.
 
--> ISS analyse wer hängt zusammen und verdeutlichen
+Coreness ist ein Maß, das bei der Identifizierung von eng miteinander verbundenen Gruppen innerhalb eines Netzwerks hilfreich ist. Der K-Core bezeichnet die größte der Gruppen, deren Entitäten mit mindestens k anderen Entitäten innerhalb der Gruppe verbunden sind“ (IBM Corporation, 2017, Abschnitt 10).
 
-
-
-### 14 ...................
+„Die Closeness-Zentralität misst die Anzahl der kürzesten Pfade (Beziehungen) von einem Akteur zu allen anderen Akteuren. Je größer die Closeness-Zentralität eines Akteurs ist, umso schneller kann er sämtliche direkten und indirekten Kontakte erreichen“ (Sakschewski, o.J., Abschnitt 6, Herv. i. Org.). Die Closeness berechnen sie mithilfe des folgenden Befehls für alle Knoten des Netzwerks:
 
 
-```{r 15. Gesamtnetzwerk & Visualiserung, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+```{r 11. Gesamtnetzwerk & Visualiserung, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(igraph)
+
+el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/node.csv", header=T, as.is=T, sep = ",")
+
+edgematrix <-as.matrix(el)
+
+space <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+space
+
+?vertex.shapes
+
+#Aufteilung der Menschen
+shape<-c("circle")
+V(space)[V(space)$type == " 1"]$shape <- "circle"
+V(space)[V(space)$type == " 1"]$color <- "white"
+
+#Aufteilung der Organisationen
+shape<-c("square")
+V(space)[V(space)$type == " 2"]$shape <- "square"
+V(space)[V(space)$type == " 2"]$color <- "grey"
+
+#Aufteilung der Projekte
+shape<-c("rectangle")
+V(space)[V(space)$type == " 3"]$shape <- "rectangle"
+V(space)[V(space)$type == " 3"]$color <- "#F5F6CE"
 
 
-#Next Stage alles visualisieren mit aufgetrennten akteuren bla bla
 
+#Visualisierung
+
+plot(space,
+     layout=layout_nicely,
+     edge.arrow.size=.2,
+     main="Gesamtnetzwerk der Raumfahrtunternehmen")
 
 
 ```
 
-# 16. Diskussion: Fazit, Limitationen und Ausblick
+# 12. Diskussion: Fazit, Limitationen und Ausblick
 
 # Anlage
 ## Literatur
