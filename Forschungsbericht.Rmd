@@ -275,6 +275,7 @@ space_cluster1
 cl <- cluster_walktrap(space_cluster1)
 modularity(cl)
 membership(cl)
+par(mfrow=c(1,2), mar=c(0,0,2,1)) 
 plot(cl, space_cluster1, 
      main="Walktrapcluster des Netzwerkes",
      vertex.size=5,
@@ -343,7 +344,7 @@ V(spaceXego1)[V(spaceXego1)$type == "3"]$color <- "#F5F6CE"
 
 plot(spaceXego1,
      layout=layout_with_kk,
-     vertex.label=V(space)$ID,
+     vertex.label=V(space)$id,
      vertex.label.color="black",
      edge.color="black",
      main="Ego Netzwerk von SpaceX")
@@ -370,7 +371,7 @@ Coreness ist ein Maß, das bei der Identifizierung von eng miteinander verbunden
 
 
 
-```{r 11. Gesamtnetzwerk & Visualiserung, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r 11. Gesamtnetzwerk & Visualiserung, fig.height=5, fig.width=10, }
 library(igraph)
 
 el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
@@ -378,34 +379,54 @@ nodes <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/maste
 
 edgematrix <-as.matrix(el)
 
-space <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-space
+spacegesamt <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+spacegesamt
 
-?vertex.shapes
+?igraph.plotting
+
+class(spacegesamt)
+summary(spacegesamt)
+
+#Differenzierung der Akteure durch Shapes und Color
 
 #Aufteilung der Menschen
-shape<-c("circle")
-V(space)[V(space)$type == " 1"]$shape <- "circle"
-V(space)[V(space)$type == " 1"]$color <- "white"
+V(spacegesamt)[V(spacegesamt)$type == 1]$shape <- "circle"
+V(spacegesamt)[V(spacegesamt)$type == 1]$color <- "white"
+V(spacegesamt)[V(spacegesamt)$type == 1]$frame.color <- "red"
+
 
 #Aufteilung der Organisationen
-shape<-c("square")
-V(space)[V(space)$type == " 2"]$shape <- "square"
-V(space)[V(space)$type == " 2"]$color <- "grey"
+V(spacegesamt)[V(spacegesamt)$type == 2]$shape <- "square"
+V(spacegesamt)[V(spacegesamt)$type == 2]$color <- "grey"
 
 #Aufteilung der Projekte
-shape<-c("rectangle")
-V(space)[V(space)$type == " 3"]$shape <- "rectangle"
-V(space)[V(space)$type == " 3"]$color <- "#F5F6CE"
+V(spacegesamt)[V(spacegesamt)$type == 3]$shape <- "rectangle"
+V(spacegesamt)[V(spacegesamt)$type == 3]$color <- "#F5F6CE"
+
+V(spacegesamt)[V(spacegesamt)$type == 4]$shape <- "sphere"
+V(spacegesamt)[V(spacegesamt)$type == 4]$color <- "#CECEF6"
+
+#Visuelle Effekte
+V(spacegesamt)[V(spacegesamt)$name]$label.color <- "black"
+
+#Personen, die in mehreren Organisationen waren
+V(spacegesamt)[V(spacegesamt)$name == "Gwynne Shotwell" ]$color <- "#9FF781"
+V(spacegesamt)[V(spacegesamt)$name == "Brian Bjelde"]$color <- "#9FF781"
+V(spacegesamt)[V(spacegesamt)$name == "Lars Blackmore"]$color <- "#9FF781"
 
 
-
-#Visualisierung
-
-plot(space,
-     layout=layout_nicely,
-     edge.arrow.size=.2,
-     main="Gesamtnetzwerk der Raumfahrtunternehmen")
+#Visualisierung der Daten
+plot(spacegesamt,
+     main="Finale Gesamtvisualisierung des Netzwerkes",
+     asp=0.5,
+     layout=layout_with_kk,
+     vertex.label=V(spacegesamt)$id,
+     vertex.size=7,
+     vertex.label.family = "Helvetica",
+     edge.arrow.size=0.4,
+     edge.color="black",
+     edge.curved=curve_multiple(spacegesamt),
+     sub="Kreis = Mensch, Quadrat = Organisation, Sphere=Universität")
 
 
 ```
