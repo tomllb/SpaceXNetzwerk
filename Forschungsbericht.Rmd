@@ -6,7 +6,7 @@ date: "WS 20/21"
 output:
   pdf_document: default
   html_notebook: default
-subtitle: Analyse des SpaceX Netzwerkes
+subtitle: Analyse der Vorstände von Raumfahrtunternehmen mit Schwerpunkt auf SpaceX 
 ---
 
 # Einleitung
@@ -17,7 +17,11 @@ Im Folgenden werden die Forschung sowie die Generierung des Netzwerkes erklärt 
 # Vorarbeiten und vergleichbare Studien
 ## Forschungsstand
 
-----
+Der aktuelle Forschungsstand zeigt somit noch keine Studien zum hier untersuchten Thema. Forschung zu der Zusammensetzung des SpaceX Vorstandes und deren Verknüpfung zu anderen Raumfahrtunternehmen und Projekten ist bisher nicht vorhanden. Ein privates amerikanisches Raumfahrtunternehmen wurde bisher nicht in den internationalen Kontext gesetzt und auf personelle Verknüpfungen intern wie extern untersucht. Die vorliegende Arbeit schließt damit eine Forschungslücke.
+
+## Vergleichbare Studien
+
+Recherchen nach Studien mit vergleichbaren Thematiken wie Raumfahrtindustrie, Raumfahrtunternehmen oder Projekte wie die ISS haben ergeben, dass es bisher sehr wenige Studien in diesen Bereichen gibt. Bisher zeigt die Forschung den Zusammenhang von privaten und staatlichen Raumfahrtunternehmen und deren Verknüpfung auf persönlicher sowie projekt-bezogener Basis nicht auf. Besonders deutsche Studien sind kaum zu finden, Studien auf englischer Sprache behandeln entfernt verwandte Themen. Dazu zählen unter anderem autonome Technologie, Organisationsstrukturen und Kommunikation der NASA und Innovationsprozesse der Space-Industry.
 
 ## Arbeitshypothesen
 
@@ -65,7 +69,19 @@ diameter(space)
 farthest_vertices(space)
 ```
 
-Das Netzwerk besteht aus 71 Komponenten. Die Dichte im Netzwerk beträgt 0,15% Prozent. Das lässt daraus interpretieren, dass die Organisationen hauptächlich alleine arbeiten und die Beziehungen untereinander gering sind. Die maximale Pfaddistanz beträgt 2 Schritte. Von einem zu einem anderen Punkt sind es maximal 2 Schritte. Elon Musk und die ISS besitzen die höchste Pfaddistanz.
+# Schlussfolgerung
+Das Netzwerk besteht aus 71 Komponenten. Die Dichte im Netzwerk beträgt 0,15% Prozent. Das lässt daraus interpretieren, dass die Organisationen hauptächlich alleine arbeiten und die Beziehungen untereinander gering sind. Die maximale Pfaddistanz beträgt 2 Schritte. Von einem zu einem anderen Punkt sind es maximal 2 Schritte. Elon Musk und die ISS besitzen die höchste Pfaddistanz. Das Gesamtnetzwerk ist gerichtet.
+
+## Erklärung:
+An der ***Dichte*** eines Netzwerks lässt sich zeigen, welcher Anteil der theoretisch möglichen Zweierbeziehungen empirisch realisiert worden ist. Meistens nimmt die Dichte mit zunehmender Netzwerkgröße ab. (Baur, 2014)
+Zudem gilt die Annahme, dass ein Netzwerk, das einen hohen Dichte-Grad aufweist, hauptsächlich aus starken Beziehungen besteht. (Stegbauer & Häußling, 2010)
+
+Aus struktureller Sicht gibt es vollständig Verbundene Graphen sowie solche, die unverbunden beziehungsweise nur teilweise verbunden sind. Unverbundene Graphen lassen sich in Teilgraphen zerlegen, bei denen keine Pfade zwischen den Knoten der verschiedenen Teilgraphen bestehen. Als ***Komponenten*** werden maximal in sich verbundene Teilgraphen bezeichnet, die zu einem übergeordneten Graphen gehören. (Stegbauer & Häußling, 2010)
+
+Ein Netzwerk kann ***gerichtet*** sein, beziehungsweise kann die Richtung einer Beziehung dargestellt werden. Dies bezieht sich auf einseitige Handlungen im Gegensatz zu wechselseitigen Handlungen. (Baur, 2014)
+
+
+
 
 ```{r 2. Erste Visualisierung des SpaceX Netzwerkes, fig.height=5, fig.width=10, message=TRUE, warning=TRUE, paged.print=TRUE}
 library(igraph)
@@ -95,12 +111,15 @@ vertex.attributes(space)$sex
 vertex.attributes(space)$type
 ```
 
-Das SpaceX Netzwerk besitzt folgende Vertex Attribute:
+# Das *Netzwerk* besitzt folgende Vertex Attribute:
  
 *Vertex-Attribute* 
 - name: Name des Knotens 
 - sex:  1 male, 2 female, 3 diverse
 - type: Unterscheidung zwischen Mensch, Unternehmen und Projekt: 1=Mensch, 2=Unternehmen, 3=Projekt
+
+## Erklärung
+
 
 
 ```{r 4. Edgeattribute}
@@ -112,13 +131,16 @@ edge.attributes(space)$time
 edge.attributes(space)$position
 ```
 
-Das SpaceX Netzwerk besitzt folgende Edge Attribute:
+Das *Netzwerk* besitzt folgende Edge Attribute:
 
 *Edge-Attribute*
 - position: Position im Vorstand: CEO/Vorstand = 1, Präsident/in = 2, Vizepräsident/in = 3, Chefingeniur/Landingengineer = 4, 5=Director/Generel/Chief/Vorstandsvorsitzende/r, 6=Member
 - time: Zeit im Vorstand: 1 = ein bis vier Jahre, 2 = fünf bis neun Jahre, 3 = zehn Jahre oder länger
 - activ: Zeigt ob Person aktiv oder passiv im Unternehmen ist: 1=aktiv, 2=war im Unternehmen
 
+## Erklärung
+
+Die ***Kanten*** eines Netzwerkes und damit die Beziehungen, die erfasst werden, werden als Edges bezeichnet. (Baur, 2014)
 
 ```{r 5. Erstellen Teilnetzwerk nach Geschlechtern, fig.height=10, fig.width=15, message=FALSE, warning=FALSE, paged.print=FALSE}
 el <- read.csv("https://raw.githubusercontent.com/tomllb/SpaceXNetzwerk/master/edge.csv", header=T, as.is=T, sep = ",")
@@ -176,7 +198,7 @@ plot(space,
 
 ```
 
-In diesem Teilnetzwerk unterscheiden wir zwischen eines aktuellen und ehmaligen Berschäftigungsverhältnisses der einzelnen Personen bei den Raumfahrtunternehmen. Unser Rechercheergebnis  zeigt ein Wechsel von Personal innerhalb der Organisationen SpaceX und NASA. Die Beschäftigten der Nicht-US Unternehmen verbleiben in ihren eigenen Raumfahrtunternehmen, es findet kein Austausch statt. Die Farbe der Beziehungen wird in grün und rot aufgeteilt um das aktive und passive Verhältnis besser zu visualisieren. Die hellgelben Nodes vertreten Projekte, welche keine aktiven oder passiven Beziehungen aufweisen.
+In diesem Teilnetzwerk unterscheiden wir zwischen eines aktuellen und ehmaligen Berschäftigungsverhältnisses der einzelnen Personen bei den Raumfahrtunternehmen. Unser Rechercheergebnis zeigt einen Wechsel von Personal innerhalb der Organisationen SpaceX und NASA. Die Beschäftigten der Nicht-US Unternehmen verbleiben in ihren eigenen Raumfahrtunternehmen, es findet kein Austausch statt. Die Farbe der Beziehungen wird in grün und rot aufgeteilt um das aktive und passive Verhältnis besser zu visualisieren. Die hellgelben Nodes vertreten Projekte, welche keine aktiven oder passiven Beziehungen aufweisen.
 
 
 ```{r 8. Teilnetzwerk Positionen, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -255,7 +277,7 @@ plot(space1,
 
 ```
 
-XXX Erklären
+Die Teilnetzwerke verdeutlichen die verschiedenen Positionen in Raumfahrtunternehmen. In Raumfahrtunternehmen wie SpaceX und CSA gibt es jeweils einen CEO/Vorstandsvorsitzenden, in der deutschen Raumfahrt existieren jedoch mehrere Vorstandsvorsitzende und einen "Head of Office" gibt es hier nicht. Auch zu beachten ist die große Anzahl von Vorstandsmitgliedern in der NASA, welche jedoch keinen CEO oder "Head of Office" aufweist. Im letzten Teilnetzwerk werden im gesamten Netzwerk anhand von Farben die Positionen dargestellt. Hier wird nochmal allgemein verdeutlicht, wie einzelne Mitglieder zum Unternehmen stehen.
 
 
 ```{r 8. Cluster im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -318,8 +340,15 @@ plot(space,
 par(mfrow=c(1,2), mar=c(0,0,2,1)) 
 par(mfrow=c(1,1), mar=c(0,0,2,1)) 
 ```
-Erklären des Walktrapclusters und Edge Between (Literatur google Scholar)
 
+# Schlussfolgerung
+
+Das ***Walktrapcluster*** zeigt hier die unterschiedlichen kleinen Gruppen im Netzwerk anhand der Dichte der verbundenen Knoten. Deutlich werden die einzelnen Gruppen der Organisationen und deren Mitglieder. 
+
+Das ***Edge-Betweennesscluster*** ist der nächste Schritt. Dieses Cluster verdeutlicht, wie sehr die Cluster miteinander verbunden sind. Dadurch wird ein neues Cluster erhoben. Erkennen kann man das anhand des roten Bereiches, welcher SpaceX und NASA darstellt. 
+
+## Erklärung
+***Cluster*** bezeichnen die Untergruppen eines Netzwerks (Beck, 2013).
 
 
 ```{r 9. Ego Netzwerk höhster Degreewert & höhster Betweennesswert, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -349,7 +378,15 @@ plot(spaceXego1,
      edge.color="black",
      main="Ego Netzwerk von SpaceX")
 ```
-XXX (Recherche Edge und Betweenees Netzwerk Literatur) Kleine Erklärung zu Degree und Betweenness Werten!! fortführend...
+
+In diesem Teilnetzwerk schauen wir uns gezielt den SpaceX Vorstand und deren Projekte an, da diese den größten Degree-Wert aufweisen. Außerdem besitzt SpaceX auch den höhsten Betweennesswert. Der Vorstand besteht aus 15 Mitgliedern, mit einem Frauenanteil von 20%.
+
+## Erklärung
+Mit der ***Betweennness-Zentralität*** kann das Potential eines Knotens dargestellt werden, die Kommunikation entlang der Kanten im Netzwerk zu kontrollieren. Diese ist umso höher, je öfter der untersuchte Knoten in den kürzesten Verbindungen zwischen allen anderen Knoten im Netzwerk enthalten ist. Der untersuchte Knoten hätte somit eine Wichtige Vermittlerrolle für den Informationsaustausch im Netzwerk. (Metz, 2017) Es wird analysiert, inwiefern ein Knotenpaar strukturell abhängig ist von einem weiteren Knoten. (Zimmermann & Steinebach, 2018)
+
+Der ***Degree-Wert*** bezieht sich darauf, wie viele Verbindungen ein Knoten hat. Asymetrische Netzwerke lassen sich dabei in indegrees, also empfangene Beziehungen und outdegrees, von dem Knoten ausgehende Beziehungen unterteilen. (Beck, 2013)
+
+Die Zahl der direkten Nachbarn eines Knotens wird durch die ***Degree-Zentralität*** gemessen. Akteure mit einer großen Nachbarschaft sind also Zentral nach Degree. So kann das Potential eines Akteurs für das Netzwerk abgeschätzt werden. (Stegbauer & Häußling, 2010)
 
 
 ```{r 10. Closeness, Eigenvector und K-Core im Netzwerk, fig.height=7, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -361,13 +398,23 @@ eigen_centrality(space)
 coreness(space)
 ```
 
-XXX  CLoseness Eigenvector mit Lektüre erklären
+# Schlussfolgerung:
 
-„Mit dem Zentralitätsmaß "Eigenvektor" wird ermittelt, wie gut eine Entität verbunden ist und wie stark der direkte Einfluss ist, den sie auf andere Entitäten im Netzwerk ausüben kann“ (IBM Corporation, 2017, Abschnitt 7). Knoten mit einem hohen Eigenvektor-Maß sind mit wichtigen Knoten verbunden.
+Der *Closenesswert* ist unter 0 da die Akteure eine relativ geringe Beziehung ausweisen und daher nicht eng miteinander verbunden sind. Da es sich hierbei um ein geschäftliches Verhältnis handelt, können wir nicht beurteilen, wie die einzelnen Akteure untereinander aufgestellt sind.
 
-Coreness ist ein Maß, das bei der Identifizierung von eng miteinander verbundenen Gruppen innerhalb eines Netzwerks hilfreich ist. Der K-Core bezeichnet die größte der Gruppen, deren Entitäten mit mindestens k anderen Entitäten innerhalb der Gruppe verbunden sind“ (IBM Corporation, 2017, Abschnitt 10).
+Der *Eigenvektor* der Akteure liegt auch unter 0. Jediglich der Knoten *SpaceX* besitzt einen Eigenvektor von 1.
 
-„Die Closeness-Zentralität misst die Anzahl der kürzesten Pfade (Beziehungen) von einem Akteur zu allen anderen Akteuren. Je größer die Closeness-Zentralität eines Akteurs ist, umso schneller kann er sämtliche direkten und indirekten Kontakte erreichen“ (Sakschewski, o.J., Abschnitt 6, Herv. i. Org.). Die Closeness berechnen sie mithilfe des folgenden Befehls für alle Knoten des Netzwerks:
+Bei den *Cornesswerten* besitzten mehrere Knoten bis zu zwei andere Verbindungen. Beispiele wären *Patricia Cooper* oder die Organisation *JAXA*. Vorallem die Organisationen haben erhöte Cornesswerte, da sich dort die meisten Knoten treffen.
+
+## Erklärung
+
+Die ***Closeness-Zentralität*** misst die Anzahl der kürzesten Pfade von einem Akteur zu allen anderen Akteuren. Je größer die Closeness-Zentralität eines Akteurs ist, umso schneller kann er sämtliche direkten und indirekten Kontakte erreichen (Sakschewski, o.J., Abschnitt 6, Herv. i. Org.)
+
+Mit dem Zentralitätsmaß ***Eigenvektor*** wird ermittelt, wie gut eine Entität verbunden ist und wie stark der direkte Einfluss ist, den sie auf andere Entitäten im Netzwerk ausüben kann. Knoten mit einem hohen Eigenvektor-Maß sind mit wichtigen Knoten verbunden (IBM Corporation, 2017)
+
+Die ***Closeness-Zentralität*** misst die Anzahl der kürzesten Pfade von einem Akteur zu allen anderen Akteuren. Je größer die Closeness-Zentralität eines Akteurs ist, umso schneller kann er sämtliche direkten und indirekten Kontakte erreichen (Sakschewski, o.J., Abschnitt 6, Herv. i. Org.)
+
+***Coreness*** ist ein Maß, das bei der Identifizierung von eng miteinander verbundenen Gruppen innerhalb eines Netzwerks hilfreich ist. Der K-Core bezeichnet die Größe der Gruppen, deren Entitäten mit mindestens anderen Entitäten innerhalb der Gruppe verbunden sind (IBM Corporation, 2017).
 
 
 
@@ -426,18 +473,32 @@ plot(spacegesamt,
      edge.arrow.size=0.4,
      edge.color="black",
      edge.curved=curve_multiple(spacegesamt),
-     sub="Kreis = Mensch, Quadrat = Organisation, Sphere=Universität")
+     sub="Kreis = Mensch, Quadrat = Organisation/Projekt, Sphere = Universität")
 
 
 ```
 
+# Gesamtnetzwerk
+
+Im letzten Netzwerk erkennt man die entgültige und finale Darstellung des Netzwerkes. Anhand der unterschiedlichen Formen kann man klar und strukturiert die verschiedenen Akteurestypen erkennen und unterscheiden. Zusätzlich wurden die Knoten *Brian Bjelde*, *Gwynne Shotwell* *Lars Blackmore* grün markiert, da diese Schnittstellen zu anderen Organisationen besitzen. Zusätzlich erkennt man die verschiedenen Universitäten, an denen manche Akteure in der Vergangenheit studiert haben.
+
 # 12. Diskussion: Fazit, Limitationen und Ausblick
 
-# Anlage
-## Literatur
--> Netzwerkliteratur reinpasten
+Am Ende der Netzwerkforschung wurde festgestellt, dass die Akteure der einzelnen Raumfahrtunternehmen nur sehr sporadisch vernetz sind. Die hauptsächliche Verbindung wird durch gemeinsame Projekte wie die ISS hergestellt. Dieses Netzwerk bildet allerdings nur die Geschäftsbeziehungen der Akteure ab und kann deswegen keine Aussage über private Beziehungen der Personen geben. Ein kompletter Überblick über die Vernetzung kann also nicht garantiert werden. Ein Ausblick kann schwierig gegeben werden, da es sich um schwankende Organisationen handelt, die natürlich auch Profit generieren und öfters auch eigene Unternehmenskulturen besitzen. Ein Austausch in solchen Branchen kann sich als schwierig gestalten, denn Verträge meistens Sperrfristen von durchschnittlich zwei Jahren aufweisen. 
 
-- LINKED IN - und co.
+# Anlage
+
+## Literatur
+
+Baur, N. (2014). *Netzwerkdaten*. Wiesbaden: Springer Fachmedien Wiesbaden
+
+Beck, M. (2013).  *Netzwerken – Bildungsmaterialien der Rosa-Luxemburg-Stiftung*. Berlin
+
+Metz, T. (2017). *Netzwerkanalyse* in Jäckle, S. (Hrsg.) *Neue Trends in den Sozialwissenschaften* (S. 203-237). Wiesbaden: Springer Fachmedien Wiesbaden
+
+Stegbauer, C., Häußling, R. (Hrsg.) (2010). *Handbuch Netzwerkforschung*. Wiesbaden: Springer Fachmedien Wiesbaden 
+
+Zimmermann, J., Steinebach, O. (2018). *Die Methodik der sozialen Netzwerkanalyse - dargestellt am Beispiel der internationalen Rechnungslegung*. WiSt Wirtschaftswissenschaftliches Studium (12), 19-26
 
 ## Codebuch
 
@@ -445,9 +506,30 @@ https://github.com/tomllb/SpaceXNetzwerk/blob/master/Codebuch.md
 
 ## Datenmaterial und Skript
 
----
+Datenerhebung erfolgte größtenteils über LinkedIn
+
+<https://en.wikipedia.org/wiki/List_of_private_spaceflight_companies>
+<https://dst.jpl.nasa.gov/control/team.htm>
+<https://de.wikipedia.org/wiki/SpaceX#Management>
+<https://www.crunchbase.com/organization/space-exploration-technologies/people>
+<https://pitchbook.com/profiles/company/46488-07>
+
 
 ## Team, Arbeitsaufwand und Lessons Learned
 
-Recherche: xx Hours
-Forschungsbericht: xx Hours
+Recherche der Daten: 18 Hours
+Anfertigung Forschungsbericht: 25 Hours
+
+# Was haben wir gelernt?
+
+*Ricci:* Spannendes Thema wie vernetzt die Welt ist vor allem auch in unserer Forschung der Raumfahrtunternehmen. Wenn man denkt, es ist keine Vernetzung da, ist doch öfters mehr vernetzt als geglaubt.
+
+*Sebastian:* Man darf nie aufgeben beim Recherchieren! Denn man findet, egal wo, doch noch gute und spannende Quellen. Frustrationstoleranz hat sich enorm gesteigert.
+
+*Raouf:* Ich habe gelernt,dass egal wo oder wann, immer eine Vernetzung zwischen Menschen vorhanden ist. Egal ob aktiv oder passiv.
+
+*Tom:* Ich habe RStudio vertieft und finde es spannend, wie komplex doch Netzwerke sind und sich visualisieren lassen.  
+
+
+
+
