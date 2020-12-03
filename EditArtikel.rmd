@@ -1,42 +1,55 @@
 ---
-title: "226305 edit.data Beitrag SpaceX"
-subtitle: "Analyse des SpaceX Netzwerkes"
-author: "Ricarda Müterthies, Sebastian Brüne, Raouf Allaham, Tom Beyer | rm057@hdm-stuttgart.de, sb274@hdm-stuttgart.de, ma106@hdm-stuttgart.de, tb145@hdm-stuttgart.de"
+title: "226305 edit.data Beitrag ISS"
+author: Ricarda Müterthies, Sebastian Brüne, Raouf Allaham, Tom Beyer | rm057@hdm-stuttgart.de,
+  sb274@hdm-stuttgart.de, ma106@hdm-stuttgart.de, tb145@hdm-stuttgart.de
 date: "WS 20/21"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+subtitle: ISS
 ---
 
-__Anleitung__  
-Mit diesem Dokument können Sie einen Beitrag für edit.data erstellen. Der Schwerpunkt dabei liegt im Gegensatz zum Forschungsbericht in einem szenischen Einstieg und einer "Geschichte" aus dem Netzwerk, die einen journalistischen "Wert" hat (im Sinne des Nachrichtenwerts neu, überraschend, konfliktionär, etc.). Sie können sich dann auf diese Geschichte konzentrieren.
 
-__Aufbau__
-Umfang zwischen 500 und 1.000 Wörtern. 
-2 Abbildungen/Grafiken, ggf. eine davon interaktiv einbetten (via iframe)
-1 Infobox: Vorgehen und Datensatz, Link auf github account
-
-__1. Szenischer Einstieg__
-Erzeugen Sie Neugier und Interesse bei den Lesern, der unmittelbar zum Thema hinführt. 
-
-__2. Kerngeschichte erzählen__
-Beschreiben Sie die Kerngeschichte aus Ihren Daten: warum ist die Geschichte besonders relevant, gibt es vergleichbare Analysen. Folgen Sie den Daten!
-
-__3. Visualisierung einbetten und erklären__
-Folgen Sie den Daten, ein bis zwei Abbildungen des Netzwerks mit Legende zeigen ihre Geschichte. Besonders effektiv sind Vergleiche (Zeitreihen, vor/nachher, unterschiedliche Teilnetzwerke, Isolation eines Ego-Netzwerks aus dem Gesamtnetzwerk, etc.).
-
-__4. Ausblick__
-Bitte geben Sie einen Ausblick zum Kernergebnis ihrer Analyse. Wie valide sind die Ergebnisse, ist das verallgemeinerbar, etc.
-
-__5. Infokasten__
-Im Infokasten können Sie die wichtigsten Kernbegriffe der Analyse erklären und einen Link auf den Datensatz auf Github legen. 
+## **Fliegende Völkerverständigung**
+ 
+Was manchmal auf irdischem Boden unmöglich scheint, wird im Weltraum wahr: friedliche Zusammenarbeit, Feindschaften vergessen und Grenzen überwinden. Die ISS ist seit 22 Jahren Vorreiter in Sachen Völkerverständigung.
+Im Zuge einer Netzwerkanalyse zu Raumfahrtunternehmen ist die ISS als zentrales Element der Vernetzung erneut hervorgetreten und spielt heutzutage eine größere Rolle wie noch nie.Im Zuge einer Netzwerkanalyse zu Raumfahrtunternehmen, ist die ISS als zentrales Element der Vernetzung erneut hervorgetreten und spielt heutzutage eine wichtigere Rolle wie noch nie.
 
 
-<div style="width: 100%;">
-    <div style="position: relative; padding-bottom: 100.00%; padding-top: 0; height: 0;">
-    <iframe frameborder="0" width="1080" height="1080" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://view.genial.ly/5fc8dfa4059fe40d02c9bee1" type="text/html" allowscriptaccess="always" allowfullscreen="true" scrolling="yes" allownetworking="all">
-         </iframe> 
-     </div> 
-</div>
-```
+### **Heller als ein Stern**
+
+Auf 408 Kilometern Höhe schwebt sie durch den Weltraum, die internationale Raumstation (ISS). Nicht nur Bewegungen werden hier oben auf einmal leichter, sondern auch die interkulturelle Zusammenarbeit. Von den Amerikanern geplant, den Russen ins All gebracht und 14 weiteren Nationen vorangetrieben: die Raumstation mit Größe eines Fußballfeldes hat dadurch schon viele Konflikte auf der Erde zurückgelassen. Forschung, Verständigung und Zukunft stehen hier im Vordergrund. 
+
+Das größte Technologieprojekt aller Zeiten begann 1984 mit der Idee des US-Präsidenten Ronald Reagan. Die NASA erhielt den Auftrag eine neue Raumstation zu bauen, damals noch unter dem Namen „Space Station Freedom“. Innerhalb von fünf Jahren waren auch die europäische, kanadische und japanische Weltraumorganisation mit an Bord Bis 1994 die Russen dazustoßen, wurde das Projekt zweimal umbenannt und war bis dahin bereits ein Statement zur Völkerverständigung. 
+
+Zum Höhepunkt dessen kam es bei der Unterzeichnung eines internationalen Abkommens über den Betrieb und Bau der Raumstation: Vertreter von 15 Nationen versammelten sich dazu in Washington, um in Zukunft gemeinsam im Weltraum zu forschen. Das Fundament war gelegt, folgen würden viele Jahre für Bau und Ausbau des 420 Tonnen schweren Körpers im All.  
+
+1998 schossen die Russen dann das erste Modul der ISS in den Weltraum. Bereits zwei Jahre später wurde die Raumstation wohnlich gemacht, indem es durch ein Quartier für zukünftige Langzeitaufenthalte der Besatzung ergänzt wurde. Schließlich folgte diese schon im gleichen Jahr. Der erste Schritt zu einer dauerhaft bewohnten Raumstation. Pionier Bill Shepherd (USA), Yuri Gidzenko (Russland) und Sergei Krikalev (Russland) wurden seither von über 200 Astronauten abgelöst. Aber auch Weltraumtouristen konnten seit 2001 von der ISS bereits den Blick auf den eigenen Planeten genießen. Viele Namenswechsel hat sie also hinter sich und viele neue Gesichter hat sie aufgenommen. Doch die Mission blieb die Gleiche: nationenübergreifend gemeinsam forschen.
 
 
+<iframe id="rstudio" src="https://view.genial.ly/5fc8dfa4059fe40d02c9bee1">
+</iframe>
+
+### **Die Rolle der Völkerverständigung**
+
+Ehemalige Feinde zusammen auf engstem Raum. Die ISS schafft es, diese Probleme auf der Erde zurückzulassen und die friedliche Zusammenarbeit in den Vordergrund zu stellen. Ronald Reagan war es, der seine Idee der Raumstation schon bald zur Beteiligung anderer Nationen öffnete. Gründe waren jedoch auch, dass verhindert werden sollte, dass andere Länder ähnliche Projekte starten und die Völkerverständigung nach dem Kalten Krieg mit der Sowjetunion voranzutreiben.
+Auch in aktuellen politischen Lagen zeigt sich die ISS immer wieder als neutraler Raum. Ein Beispiel dafür ist der Ukraine-Konflikt zwischen den USA und Russland, der die Arbeit im All nach Aussagen der NASA nicht beeinträchtigt.
+
+### **Nicht alles Metall, das glänzt**
+
+Auch wenn die Vorstellung einer kleinen perfekten Welt im All schön wäre, ist es teilweise nur Illusion. Auch die ISS stößt immer wieder an ihre Grenzen und wirft größere und kleinere Probleme auf, technischer sowie finanzieller Art.
+
+Während der Entstehung der Raumstation war die Fertigstellung teilweise gar nicht gesichert. Eine fehlende Summe von 8,3 Milliarden Dollar stellte das Projekt 2001 vor eine große Herausforderung. Es sollte als Maßnahme auf ein Rettungsschiff sowie eine Wohneinheit verzichtet werden, was die Crew auf drei Mitglieder limitieren würde. Nur drei Insassen könnten sich im Notfall über eine vorhandene Kapsel retten.
+
+Bis heute sind technische Defekte kein Einzelfall. Gerade in diesem Jahr gab es ein Air-Leck, das behoben werden musste. Einpferchen in einen noch engeren Raum als ohnehin schon, damit das Leck geortet werden kann. Denn auch die alltäglichen Bedingungen sind von der Bewegungsfreiheit, Gerüchen und Geräuschen nicht immer angenehm, wie Astronauten berichten. Doch dies scheint ein recht kleines Opfer zu sein, das für völkische Einigung und Forschung für die Menschheit erbracht wird. Doch auch die weitere internationale Zusammenarbeit muss immer wieder neu gesichert werden, damit Länder wie Russland nicht in Zukunft tendieren aus dem Projekt auszusteigen, da der Ressourcenaufwand gegenüber den Erkenntnissen zu hoch sei.
+
+### **Ein Projekt der Spezies**
+
+Die ISS ist mehr als nur ein fliegendes Stück Metall im Weltraum. In Zeiten von politischen Unruhen, Anspannung zwischen Ländern und konkurrierenden Regierungen, ist die ISS eines der bedeutungsvollsten und wichtigsten Projekte des Menschen. Denn es zeigt nicht nur, dass eine völkerweite Zusammenarbeit möglich ist, sondern auch wie wichtig ist es, verschiedene Kulturen, Sprachen und Ideologien miteinander zu kombinieren, um zusammen als eine Spezies zu stehen. Die internationalen Barrieren wurden durch die ISS überschritten. Die Zusammenarbeit von mehreren Ländern für ein großes Ganzes zeigt, dass vielleicht auch in Zukunft Egoismus und Eitelkeit nicht mehr an vorderster Stelle stehen. Vorhandene Kritik verurteilen jedoch das Vetorecht der USA zum Beitritt der Chinesischen Volksrepublik zum Raumfahrtprogramm. Aus Sicherheitsgründen lehne die USA die Raumfahrt Kooperation weitgehend ab. Sogar ist es der NASA seit 2011 per Gesetz strikt verboten, Kooperationen mit China einzugehen. Europa und Russland sehen das allerdings anders und arbeiten zunehmend mit der Republik zusammen. Denn speziell für die Raumfahrt, einem so komplexen und teuren Fachgebiet, benötigt der Mensch all sein Wissen und seine Ressourcen, um erfolgreich Ziele umzusetzen. Und das schafft er nur durch internationale Zusammenarbeit.
+
+<br>
+<br>
+
+*PROJEKTUMSETZUNG ÜBER GITHUB:*
+<https://github.com/tomllb/SpaceXNetzwerk>
 
