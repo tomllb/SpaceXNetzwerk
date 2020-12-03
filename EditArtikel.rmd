@@ -29,57 +29,13 @@ Bitte geben Sie einen Ausblick zum Kernergebnis ihrer Analyse. Wie valide sind d
 __5. Infokasten__
 Im Infokasten können Sie die wichtigsten Kernbegriffe der Analyse erklären und einen Link auf den Datensatz auf Github legen. 
 
-# Beispiel Visualisierung mit Viznetwork
 
-```{r Gesamtnetzwerk erstellen und vereinfachen, echo=FALSE, message=TRUE, warning=TRUE, paged.print=TRUE}
-
-library(igraph)
-# Einlesen der Edge- und Nodelist
-el <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/edges.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/hdm-crpr/226305/master/data/crpr2/nodes.csv", header=T, as.is=T, sep = ",")
-# Matrix erstellen
-edgematrix <-as.matrix(el)
-# Zusammenführen von Edge- und Nodelist als igraph-Objekt s
-s <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
-
-# simplify Gesamtnetzwerk 
-# Um die Ergebnisse der Gewichte nicht zu verfälschen, werden die Edge-Attribute relation und complicated gelöscht.
-ss <- delete_edge_attr(s, "relation")
-ss <- delete_edge_attr(s, "complicated")
-list.edge.attributes(ss)
-
-# mit dem Befehl simplify() lassen sich Edge-Attribute wie das Gewicht zusammenfassen. Damit ist zwar nicht mehr nachvollziehbar, um welche Beziehung es sich handelt. Dafür lassen sich die Beziehungsstärken aber besser abbilden. Dies ist später für die Analyse von dyadischen Beziehungen wichtig.
-is_simple(ss)
-s_sim <- simplify(ss,edge.attr.comb=list(weight="sum"))
-is_simple(s_sim)
-s_sim
-```
-
-
-```{r Visualisierung mit abgestuften Farben , fig.height=8, fig.width=12, message=TRUE, warning=TRUE, paged.print=TRUE}
-
-sd <- degree(s_sim, mode = "all")
-fine = 7
-palette = colorRampPalette(c('yellow','red'))
-ired = palette(fine)[as.numeric(cut(sd, breaks = fine))]
-
-V(s_sim)$size = sd
-V(s_sim)$color = ired
-V(s_sim)$label = NA
-
-
-plot(s_sim,
-     layout=layout_with_fr,
-     asp=0, 
-     edge.arrow.size=.5,
-     vertex.frame.color=NA,
-     edge.arrow.size=.7,
-     edge.color="black",
-     edge.width=E(s_sim)$weight/2, #halbiert den Wert der Gewichte, um eine bessere Darstellung zu ermöglichen
-     edge.curved=.2,
-     edge.curved=curve_multiple(s_sim),
-     main ="Übersicht Gesamtnetzwerk",
-     sub="Größe und Intensität der Degrees, gewichtete Darstellung")
+<div style="width: 100%;">
+    <div style="position: relative; padding-bottom: 100.00%; padding-top: 0; height: 0;">
+    <iframe frameborder="0" width="1080" height="1080" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://view.genial.ly/5fc8dfa4059fe40d02c9bee1" type="text/html" allowscriptaccess="always" allowfullscreen="true" scrolling="yes" allownetworking="all">
+         </iframe> 
+     </div> 
+</div>
 ```
 
 
